@@ -1,0 +1,1195 @@
+<!doctype html>
+<html lang="id">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pembuat Sertifikat Otomatis</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        
+        body {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Press Start 2P', monospace;
+            background-color: #f0f0f0;
+            min-height: 100%;
+            overflow-x: hidden;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .neobrutalism-box {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+            border: 4px solid #000;
+            box-shadow: 8px 8px 0px #666;
+            border-radius: 0;
+            position: relative;
+        }
+
+        .neobrutalism-box-light {
+            background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+            border: 4px solid #000;
+            box-shadow: 6px 6px 0px #ffffff;
+            border-radius: 0;
+        }
+
+        .certificate-form .neobrutalism-box-light {
+            box-shadow: 6px 6px 0px #ff6b6b;
+        }
+
+        .certificate-form .description-box {
+            box-shadow: 6px 6px 0px #4ecdc4;
+        }
+
+        .certificate-form .form-container {
+            box-shadow: 6px 6px 0px #45b7d1;
+        }
+
+        .neobrutalism-button {
+            background: linear-gradient(135deg, #4a4a4a 0%, #2a2a2a 100%);
+            border: 3px solid #000;
+            box-shadow: 4px 4px 0px #666;
+            color: white;
+            padding: 12px 20px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 10px;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .neobrutalism-button:hover {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px #666;
+        }
+
+        .neobrutalism-button:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px #666;
+        }
+
+        /* Halaman 1 - Splash Screen */
+        .splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background-color: #000000;
+            z-index: 1000;
+        }
+
+
+
+        .logo-container {
+            margin: 0 20px;
+            padding: 60px 40px;
+            width: calc(100% - 40px);
+            max-width: none;
+        }
+
+        .logo-text {
+            color: white;
+            font-size: 18px;
+            line-height: 1.5;
+            margin-bottom: 40px;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .splash-button {
+            background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+            border: 4px solid #000;
+            box-shadow: 8px 8px 0px #333;
+            color: #000;
+            padding: 16px 32px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: bold;
+        }
+
+        .splash-button:hover {
+            transform: translate(4px, 4px);
+            box-shadow: 4px 4px 0px #333;
+        }
+
+        .splash-button:active {
+            transform: translate(8px, 8px);
+            box-shadow: 0px 0px 0px #333;
+        }
+
+        .glitch {
+            animation: glitch 0.3s ease-in-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+
+        /* Halaman 2 - Daftar Sertifikat */
+        .certificate-list {
+            display: none;
+            padding-bottom: 120px;
+        }
+
+        /* Footer Navigation */
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+            border: 4px solid #000;
+            box-shadow: 0px -8px 0px #000;
+            padding: 15px 20px;
+            z-index: 100;
+        }
+
+        .footer-nav {
+            display: flex;
+            gap: 8px;
+            justify-content: space-between;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .nav-button {
+            flex: 1;
+            border: 3px solid #000;
+            box-shadow: 4px 4px 0px #000;
+            color: white;
+            padding: 15px 8px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 9px;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            text-align: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-width: 0;
+        }
+
+        .nav-button:hover {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px #000;
+        }
+
+        .nav-button:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px #000;
+        }
+
+        .nav-docs {
+            background: linear-gradient(135deg, #45b7d1 0%, #3498db 100%);
+        }
+
+        .nav-docs:hover {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+        }
+
+        .nav-home {
+            background: linear-gradient(135deg, #f9ca24 0%, #f0b90b 100%);
+        }
+
+        .nav-home:hover {
+            background: linear-gradient(135deg, #f0b90b 0%, #d4a017 100%);
+        }
+
+        .nav-cert {
+            background: linear-gradient(135deg, #a55eea 0%, #8b4bc7 100%);
+        }
+
+        .nav-cert:hover {
+            background: linear-gradient(135deg, #8b4bc7 0%, #6c3a9e 100%);
+        }
+
+        .nav-button.active.nav-docs {
+            background: linear-gradient(135deg, #2980b9 0%, #1f5f8b 100%);
+            color: white;
+        }
+
+        .nav-button.active.nav-home {
+            background: linear-gradient(135deg, #d4a017 0%, #b8860b 100%);
+            color: white;
+        }
+
+        .nav-button.active.nav-cert {
+            background: linear-gradient(135deg, #6c3a9e 0%, #4a2870 100%);
+            color: white;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            margin-left: -20px;
+            margin-right: -20px;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 14px;
+            margin: 0 0 12px 0;
+            line-height: 1.4;
+        }
+
+        .header h2 {
+            color: white;
+            font-size: 10px;
+            margin: 0;
+            opacity: 0.8;
+        }
+
+        .certificate-item {
+            margin-bottom: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.1s ease;
+        }
+
+        .certificate-item:hover {
+            transform: translate(3px, 3px);
+        }
+
+        .certificate-item:nth-child(2):hover {
+            box-shadow: 3px 3px 0px #ff6b6b !important;
+        }
+
+        .certificate-item:nth-child(3):hover {
+            box-shadow: 3px 3px 0px #4ecdc4 !important;
+        }
+
+        .certificate-item:nth-child(4):hover {
+            box-shadow: 3px 3px 0px #45b7d1 !important;
+        }
+
+        .certificate-item:nth-child(5):hover {
+            box-shadow: 3px 3px 0px #f9ca24 !important;
+        }
+
+        .certificate-item:nth-child(6):hover {
+            box-shadow: 3px 3px 0px #a55eea !important;
+        }
+
+        .certificate-title {
+            font-size: 12px;
+            margin-bottom: 10px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .certificate-date {
+            font-size: 9px;
+            color: #666;
+        }
+
+        /* Halaman 3 - Form Sertifikat */
+        .certificate-form {
+            display: none;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            margin-left: -20px;
+            margin-right: -20px;
+        }
+
+        .form-header h1 {
+            color: white;
+            font-size: 10px;
+            margin: 0 0 8px 0;
+            line-height: 1.4;
+        }
+
+        .form-header h2 {
+            color: white;
+            font-size: 7px;
+            margin: 0;
+            opacity: 0.8;
+        }
+
+        .description-box {
+            margin-bottom: 25px;
+            padding: 15px;
+        }
+
+        .description-text {
+            font-size: 9px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .form-container {
+            margin-bottom: 25px;
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 8px;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            border: 3px solid #000;
+            box-shadow: 3px 3px 0px #f9ca24;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 8px;
+            background: white;
+            box-sizing: border-box;
+        }
+
+        .form-input:focus {
+            outline: none;
+            box-shadow: 1px 1px 0px #f9ca24;
+            transform: translate(2px, 2px);
+        }
+
+        .button-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .button-row .neobrutalism-button {
+            flex: 1;
+            font-size: 8px;
+            padding: 10px;
+        }
+
+        .btn-create {
+            background: linear-gradient(135deg, #a55eea 0%, #8b4bc7 100%);
+            box-shadow: 4px 4px 0px #6c3a9e;
+        }
+
+        .btn-create:hover {
+            box-shadow: 2px 2px 0px #6c3a9e;
+        }
+
+        .btn-back {
+            background: linear-gradient(135deg, #f9ca24 0%, #f0b90b 100%);
+            box-shadow: 4px 4px 0px #d4a017;
+            color: #000;
+        }
+
+        .btn-back:hover {
+            box-shadow: 2px 2px 0px #d4a017;
+        }
+
+        .btn-reset {
+            background: linear-gradient(135deg, #45b7d1 0%, #3498db 100%);
+            box-shadow: 4px 4px 0px #2980b9;
+        }
+
+        .btn-reset:hover {
+            box-shadow: 2px 2px 0px #2980b9;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .modal {
+            background: white;
+            border: 4px solid #000;
+            box-shadow: 8px 8px 0px #666;
+            padding: 25px;
+            max-width: 350px;
+            width: 100%;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            font-family: 'Press Start 2P', monospace;
+        }
+
+        .modal-title {
+            font-size: 9px;
+            margin-bottom: 15px;
+            line-height: 1.4;
+            color: #333;
+        }
+
+        .modal-date {
+            font-size: 7px;
+            margin-bottom: 20px;
+            color: #666;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Modal Konfirmasi Sertifikat */
+        .confirm-modal {
+            background: white;
+            border: 4px solid #000;
+            box-shadow: 8px 8px 0px #666;
+            padding: 25px;
+            max-width: 400px;
+            width: 100%;
+            position: relative;
+        }
+
+        .confirm-title {
+            font-size: 10px;
+            margin-bottom: 20px;
+            line-height: 1.4;
+            color: #333;
+            text-align: center;
+        }
+
+        .confirm-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .confirm-buttons .neobrutalism-button {
+            flex: 1;
+            font-size: 9px;
+            padding: 12px;
+        }
+
+        /* Loading Animation */
+        .loading-container {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #000;
+            border-top: 4px solid #fff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        .loading-text {
+            font-size: 8px;
+            color: #333;
+            line-height: 1.4;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .logo-text {
+                font-size: 14px;
+            }
+            
+            .header h1 {
+                font-size: 11px;
+            }
+            
+            .certificate-title {
+                font-size: 9px;
+            }
+
+            .nav-button {
+                font-size: 8px;
+                padding: 12px 6px;
+            }
+
+            .footer-nav {
+                gap: 6px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .nav-button {
+                font-size: 7px;
+                padding: 10px 4px;
+            }
+
+            .footer-nav {
+                gap: 4px;
+            }
+        }
+    </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <main><!-- Halaman 1: Splash Screen -->
+   <div id="splashScreen" class="splash-screen">
+    <div class="logo-container">
+     <div id="logoText" class="logo-text">
+      GUGUS 4 WIDYA KARYA
+     </div>
+     <div style="display: flex; flex-direction: column; gap: 20px; align-items: center;"><button class="splash-button" onclick="showCertificateList()"> Sertifikat </button> <button class="splash-button" onclick="showDocumentation()"> Dokumentasi </button>
+     </div>
+     <div style="text-align: center; margin-top: 60px; font-size: 7px; color: white; line-height: 1.4;">
+      ❤️ Made With Mumet By AprelRYU ❤️
+     </div>
+     <div style="display: flex; justify-content: center; gap: 15px; margin-top: 30px; flex-wrap: wrap;"><a href="https://www.instagram.com/aprelryu" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; background: linear-gradient(135deg, #a55eea 0%, #8b4bc7 100%); color: white; padding: 10px 15px; border: 2px solid #000; box-shadow: 3px 3px 0px #ffffff; text-decoration: none; font-family: 'Press Start 2P', monospace; font-size: 8px; transition: all 0.1s ease;"> Instagram </a> <a href="https://tiktok.com/@aprelryu" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; background: linear-gradient(135deg, #000000 0%, #333333 100%); color: white; padding: 10px 15px; border: 2px solid #000; box-shadow: 3px 3px 0px #ffffff; text-decoration: none; font-family: 'Press Start 2P', monospace; font-size: 8px; transition: all 0.1s ease;"> TikTok </a> <a href="https://youtube.com/aprelryu" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; background: linear-gradient(135deg, #FF0000 0%, #CC0000 100%); color: white; padding: 10px 15px; border: 2px solid #000; box-shadow: 3px 3px 0px #ffffff; text-decoration: none; font-family: 'Press Start 2P', monospace; font-size: 8px; transition: all 0.1s ease;"> YouTube </a>
+     </div>
+    </div>
+   </div><!-- Halaman 2: Daftar Sertifikat -->
+   <div id="certificateList" class="certificate-list">
+    <div class="container">
+     <div class="header neobrutalism-box">
+      <h1>Aplikasi Pembuat Sertifikat</h1>
+      <h2>Gugus 4 Widya Karya</h2>
+     </div>
+     <div class="certificate-item neobrutalism-box-light" onclick="showModal('Sertifikat 1', '15 November 2024')" style="box-shadow: 6px 6px 0px #ff6b6b;">
+      <div class="certificate-title">
+       Sertifikat 1
+      </div>
+      <div class="certificate-date">
+       Tanggal Pelaksanaan: 15 November 2024
+      </div>
+     </div>
+     <div class="certificate-item neobrutalism-box-light" onclick="showModal('Sertifikat 2', '20 November 2024')" style="box-shadow: 6px 6px 0px #4ecdc4;">
+      <div class="certificate-title">
+       Sertifikat 2
+      </div>
+      <div class="certificate-date">
+       Tanggal Pelaksanaan: 20 November 2024
+      </div>
+     </div>
+     <div class="certificate-item neobrutalism-box-light" onclick="showModal('Sertifikat 3', '25 November 2024')" style="box-shadow: 6px 6px 0px #45b7d1;">
+      <div class="certificate-title">
+       Sertifikat 3
+      </div>
+      <div class="certificate-date">
+       Tanggal Pelaksanaan: 25 November 2024
+      </div>
+     </div>
+     <div class="certificate-item neobrutalism-box-light" onclick="showModal('Sertifikat 4', '30 November 2024')" style="box-shadow: 6px 6px 0px #f9ca24;">
+      <div class="certificate-title">
+       Sertifikat 4
+      </div>
+      <div class="certificate-date">
+       Tanggal Pelaksanaan: 30 November 2024
+      </div>
+     </div>
+     <div class="certificate-item neobrutalism-box-light" onclick="showModal('Sertifikat 5', '5 Desember 2024')" style="box-shadow: 6px 6px 0px #a55eea;">
+      <div class="certificate-title">
+       Sertifikat 5
+      </div>
+      <div class="certificate-date">
+       Tanggal Pelaksanaan: 5 Desember 2024
+      </div>
+     </div>
+     <div style="text-align: center; margin-top: 20px; padding: 15px; font-size: 7px; color: #666; line-height: 1.4;">
+      ❤️ Made With Mumet By AprelRYU ❤️
+     </div>
+    </div>
+   </div><!-- Fixed Footer Navigation -->
+   <div id="fixedFooter" class="footer" style="display: none;">
+    <div class="footer-nav"><button class="nav-button nav-docs" onclick="showDocumentation()"> Dokumentasi </button> <button class="nav-button nav-home" onclick="showHome()"> Beranda </button> <button class="nav-button nav-cert active" onclick="showCertificateList()"> Sertifikat </button>
+    </div>
+   </div><!-- Halaman 3: Dokumentasi -->
+   <div id="documentationPage" class="certificate-list">
+    <div class="container">
+     <div class="header neobrutalism-box">
+      <h1>Dokumentasi Kegiatan</h1>
+      <h2>Gugus 4 Widya Karya</h2>
+     </div>
+     <div class="certificate-item neobrutalism-box-light" onclick="showDocModal('Kegiatan 1', '10 November 2024', 'https://drive.google.com/drive/folders/kegiatan1')" style="box-shadow: 6px 6px 0px #e67e22;">
+      <div class="certificate-title">
+       Kegiatan 1
+      </div>
+      <div class="certificate-date">
+       Tanggal Pelaksanaan: 10 November 2024
+      </div>
+     </div>
+     <div class="certificate-item neobrutalism-box-light" onclick="showDocModal('Kegiatan 2', '15 November 2024', 'https://drive.google.com/drive/folders/kegiatan2')" style="box-shadow: 6px 6px 0px #27ae60;">
+      <div class="certificate-title">
+       Kegiatan 2
+      </div>
+      <div class="certificate-date">
+       Tanggal Pelaksanaan: 15 November 2024
+      </div>
+     </div>
+     <div class="certificate-item neobrutalism-box-light" onclick="showDocModal('Kegiatan 3', '20 November 2024', 'https://drive.google.com/drive/folders/kegiatan3')" style="box-shadow: 6px 6px 0px #8e44ad;">
+      <div class="certificate-title">
+       Kegiatan 3
+      </div>
+      <div class="certificate-date">
+       Tanggal Pelaksanaan: 20 November 2024
+      </div>
+     </div>
+     <div class="certificate-item neobrutalism-box-light" onclick="showDocModal('Kegiatan 4', '25 November 2024', 'https://drive.google.com/drive/folders/kegiatan4')" style="box-shadow: 6px 6px 0px #c0392b;">
+      <div class="certificate-title">
+       Kegiatan 4
+      </div>
+      <div class="certificate-date">
+       Tanggal Pelaksanaan: 25 November 2024
+      </div>
+     </div>
+     <div class="certificate-item neobrutalism-box-light" onclick="showDocModal('Kegiatan 5', '30 November 2024', 'https://drive.google.com/drive/folders/kegiatan5')" style="box-shadow: 6px 6px 0px #2c3e50;">
+      <div class="certificate-title">
+       Kegiatan 5
+      </div>
+      <div class="certificate-date">
+       Tanggal Pelaksanaan: 30 November 2024
+      </div>
+     </div>
+     <div style="text-align: center; margin-top: 20px; padding: 15px; font-size: 7px; color: #666; line-height: 1.4;">
+      ❤️ Made With Mumet By AprelRYU ❤️
+     </div>
+    </div>
+   </div><!-- Halaman 4: Form Sertifikat -->
+   <div id="certificateForm" class="certificate-form">
+    <div class="container">
+     <div class="form-header neobrutalism-box">
+      <h1 id="formTitle">Sertifikat 1</h1>
+      <h2 id="formDate">Tanggal Pelaksanaan: 15 November 2024</h2>
+     </div>
+     <div class="description-box neobrutalism-box-light">
+      <div class="description-text">
+       Kegiatan sosialisasi pembelajaran inovatif dalam rangka peningkatan kualitas pendidikan di era digital. Program ini meliputi workshop teknologi pembelajaran, strategi pengajaran modern, dan implementasi kurikulum terbaru untuk menciptakan lingkungan belajar yang efektif dan menyenangkan.
+      </div>
+     </div>
+     <div class="form-container neobrutalism-box-light">
+      <form id="certificateFormElement" onsubmit="createCertificate(event)">
+       <div class="form-group"><label class="form-label" for="certificateNumber">Nomor Sertifikat</label> <input type="text" id="certificateNumber" class="form-input" readonly>
+       </div>
+       <div class="form-group"><label class="form-label" for="participantName">Nama Peserta</label> <input type="text" id="participantName" class="form-input" placeholder="Masukkan nama peserta" required>
+       </div>
+       <div class="form-group"><label class="form-label" for="schoolOrigin">Asal Sekolah</label> <input type="text" id="schoolOrigin" class="form-input" placeholder="Masukkan asal sekolah" required>
+       </div><button type="submit" class="neobrutalism-button btn-create" style="width: 100%; margin-bottom: 15px;"> Buat Sertifikat </button>
+      </form>
+      <div class="button-row"><button class="neobrutalism-button btn-back" onclick="showCertificateList()"> Kembali </button> <button class="neobrutalism-button btn-reset" onclick="resetForm()"> Buat Ulang </button>
+      </div>
+     </div>
+    </div>
+   </div><!-- Modal Konfirmasi -->
+   <div id="modalOverlay" class="modal-overlay" onclick="closeModal(event)">
+    <div class="modal" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeModal()">×</button>
+     <div id="modalTitle" class="modal-title"></div>
+     <div id="modalDate" class="modal-date"></div><button class="neobrutalism-button" onclick="openCertificateForm()" style="width: 100%;"> BUKA </button>
+    </div>
+   </div><!-- Modal Dokumentasi -->
+   <div id="docModalOverlay" class="modal-overlay" onclick="closeDocModal(event)">
+    <div class="modal" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeDocModal()">×</button>
+     <div id="docModalTitle" class="modal-title"></div>
+     <div id="docModalDate" class="modal-date"></div><button class="neobrutalism-button" onclick="openDocumentation()" style="width: 100%;"> BUKA </button>
+    </div>
+   </div><!-- Modal Konfirmasi Sertifikat -->
+   <div id="confirmModalOverlay" class="modal-overlay" onclick="closeConfirmModal(event)">
+    <div id="confirmModalContent" class="confirm-modal" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeConfirmModal()">×</button>
+     <div id="confirmTitle" class="confirm-title"></div>
+     <div class="confirm-buttons"><button class="neobrutalism-button" onclick="closeConfirmModal()"> Batal </button> <button class="neobrutalism-button" onclick="processCertificate()"> Proses </button>
+     </div>
+    </div>
+   </div>
+  </main>
+  <script>
+        let currentCertificate = '';
+        let currentDate = '';
+        let currentDocActivity = '';
+        let currentDocDate = '';
+        let currentDocLink = '';
+
+        // Konfigurasi default
+        const defaultConfig = {
+            app_title: "Aplikasi Pembuat Sertifikat",
+            organization_name: "Gugus 4 Widya Karya",
+            welcome_text: "GUGUS 4 WIDYA KARYA"
+        };
+
+        // Inisialisasi SDK
+        if (window.elementSdk) {
+            window.elementSdk.init({
+                defaultConfig: defaultConfig,
+                onConfigChange: async (config) => {
+                    // Update welcome text
+                    const logoText = document.getElementById('logoText');
+                    if (logoText) {
+                        logoText.textContent = config.welcome_text || defaultConfig.welcome_text;
+                    }
+
+                    // Update header
+                    const headerTitle = document.querySelector('.header h1');
+                    if (headerTitle) {
+                        headerTitle.textContent = config.app_title || defaultConfig.app_title;
+                    }
+
+                    const headerSubtitle = document.querySelector('.header h2');
+                    if (headerSubtitle) {
+                        headerSubtitle.textContent = config.organization_name || defaultConfig.organization_name;
+                    }
+                },
+                mapToCapabilities: (config) => ({
+                    recolorables: [],
+                    borderables: [],
+                    fontEditable: undefined,
+                    fontSizeable: undefined
+                }),
+                mapToEditPanelValues: (config) => new Map([
+                    ["app_title", config.app_title || defaultConfig.app_title],
+                    ["organization_name", config.organization_name || defaultConfig.organization_name],
+                    ["welcome_text", config.welcome_text || defaultConfig.welcome_text]
+                ])
+            });
+        }
+
+        // Animasi glitch untuk logo
+        function startGlitchAnimation() {
+            const logoText = document.getElementById('logoText');
+            
+            setInterval(() => {
+                // Normal selama 2 detik
+                setTimeout(() => {
+                    // Glitch 3 kali
+                    for (let i = 0; i < 3; i++) {
+                        setTimeout(() => {
+                            logoText.classList.add('glitch');
+                            setTimeout(() => {
+                                logoText.classList.remove('glitch');
+                            }, 300);
+                        }, i * 400);
+                    }
+                }, 2000);
+            }, 4000);
+        }
+
+        // Generate nomor sertifikat unik
+        function generateCertificateNumber() {
+            const timestamp = Date.now();
+            const random = Math.floor(Math.random() * 9000) + 1000;
+            const uniqueId = (timestamp + random).toString().slice(-4);
+            return `KKG_G4_KDN / 4.11.${uniqueId} / XI / 2025`;
+        }
+
+        // Tampilkan daftar sertifikat
+        function showCertificateList() {
+            document.getElementById('splashScreen').style.display = 'none';
+            document.getElementById('certificateList').style.display = 'block';
+            document.getElementById('certificateForm').style.display = 'none';
+            document.getElementById('documentationPage').style.display = 'none';
+            document.getElementById('fixedFooter').style.display = 'block';
+            
+            // Update active state
+            updateActiveNav('cert');
+        }
+
+        // Tampilkan halaman beranda (splash screen)
+        function showHome() {
+            document.getElementById('splashScreen').style.display = 'flex';
+            document.getElementById('certificateList').style.display = 'none';
+            document.getElementById('certificateForm').style.display = 'none';
+            document.getElementById('documentationPage').style.display = 'none';
+            document.getElementById('fixedFooter').style.display = 'none';
+            
+            // Update active state
+            updateActiveNav('home');
+        }
+
+        // Tampilkan halaman dokumentasi
+        function showDocumentation() {
+            document.getElementById('splashScreen').style.display = 'none';
+            document.getElementById('certificateList').style.display = 'none';
+            document.getElementById('certificateForm').style.display = 'none';
+            document.getElementById('documentationPage').style.display = 'block';
+            document.getElementById('fixedFooter').style.display = 'block';
+            
+            // Update active state
+            updateActiveNav('docs');
+        }
+
+        // Tampilkan modal dokumentasi
+        function showDocModal(activityName, date, link) {
+            currentDocActivity = activityName;
+            currentDocDate = date;
+            currentDocLink = link;
+            
+            document.getElementById('docModalTitle').textContent = 
+                `Anda Akan Membuka Dokumentasi ${activityName}`;
+            document.getElementById('docModalDate').textContent = 
+                `Yang Dilaksanakan Pada ${date}`;
+            document.getElementById('docModalOverlay').style.display = 'flex';
+        }
+
+        // Tutup modal dokumentasi
+        function closeDocModal(event) {
+            if (!event || event.target === document.getElementById('docModalOverlay')) {
+                document.getElementById('docModalOverlay').style.display = 'none';
+            }
+        }
+
+        // Buka dokumentasi (redirect ke Google Drive)
+        function openDocumentation() {
+            window.open(currentDocLink, '_blank', 'noopener,noreferrer');
+            document.getElementById('docModalOverlay').style.display = 'none';
+        }
+
+        // Update active navigation state
+        function updateActiveNav(activeNav) {
+            // Remove active class from all nav buttons
+            document.querySelectorAll('.nav-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Add active class to current nav
+            const activeButton = document.querySelector(`.nav-${activeNav}`);
+            if (activeButton) {
+                activeButton.classList.add('active');
+            }
+        }
+
+        // Tampilkan modal konfirmasi
+        function showModal(certificateName, date) {
+            currentCertificate = certificateName;
+            currentDate = date;
+            
+            document.getElementById('modalTitle').textContent = 
+                `Anda Akan Membuka Aplikasi Pembuat ${certificateName}`;
+            document.getElementById('modalDate').textContent = 
+                `Yang Dilaksanakan Pada ${date}`;
+            document.getElementById('modalOverlay').style.display = 'flex';
+        }
+
+        // Tutup modal
+        function closeModal(event) {
+            if (!event || event.target === document.getElementById('modalOverlay')) {
+                document.getElementById('modalOverlay').style.display = 'none';
+            }
+        }
+
+        // Buka form sertifikat
+        function openCertificateForm() {
+            document.getElementById('modalOverlay').style.display = 'none';
+            document.getElementById('certificateList').style.display = 'none';
+            document.getElementById('certificateForm').style.display = 'block';
+            document.getElementById('documentationPage').style.display = 'none';
+            document.getElementById('fixedFooter').style.display = 'none';
+            
+            document.getElementById('formTitle').textContent = currentCertificate;
+            document.getElementById('formDate').textContent = `Tanggal Pelaksanaan: ${currentDate}`;
+            document.getElementById('certificateNumber').value = generateCertificateNumber();
+        }
+
+        // Reset form
+        function resetForm() {
+            document.getElementById('participantName').value = '';
+            document.getElementById('schoolOrigin').value = '';
+            document.getElementById('certificateNumber').value = generateCertificateNumber();
+        }
+
+        // Buat sertifikat dengan konfirmasi
+        function createCertificate(event) {
+            event.preventDefault();
+            
+            const participantName = document.getElementById('participantName').value;
+            const schoolOrigin = document.getElementById('schoolOrigin').value;
+            
+            if (participantName && schoolOrigin) {
+                // Tampilkan modal konfirmasi
+                document.getElementById('confirmTitle').textContent = 
+                    `Sertifikat Atas Nama ${participantName} Yang Berasal Dari ${schoolOrigin} Akan Diproses. Apakah Anda Ingin Melanjutkan?`;
+                document.getElementById('confirmModalOverlay').style.display = 'flex';
+            }
+        }
+
+        // Tutup modal konfirmasi
+        function closeConfirmModal(event) {
+            if (!event || event.target === document.getElementById('confirmModalOverlay')) {
+                document.getElementById('confirmModalOverlay').style.display = 'none';
+            }
+        }
+
+        // Proses sertifikat dengan loading
+        async function processCertificate() {
+            const participantName = document.getElementById('participantName').value;
+            const schoolOrigin = document.getElementById('schoolOrigin').value;
+            const certificateNumber = document.getElementById('certificateNumber').value;
+            
+            // Ubah konten modal menjadi loading
+            const modalContent = document.getElementById('confirmModalContent');
+            modalContent.innerHTML = `
+                <div class="loading-container">
+                    <div class="loading-spinner"></div>
+                    <div class="loading-text">Mengunduh Template Sertifikat...<br>Mohon Tunggu Sebentar</div>
+                </div>
+            `;
+            
+            try {
+                // Update loading text
+                setTimeout(() => {
+                    const loadingText = document.querySelector('.loading-text');
+                    if (loadingText) {
+                        loadingText.innerHTML = 'Memproses Data Peserta...<br>Mohon Tunggu Sebentar';
+                    }
+                }, 1000);
+
+                setTimeout(() => {
+                    const loadingText = document.querySelector('.loading-text');
+                    if (loadingText) {
+                        loadingText.innerHTML = 'Menambahkan Informasi ke Sertifikat...<br>Mohon Tunggu Sebentar';
+                    }
+                }, 2000);
+
+                setTimeout(() => {
+                    const loadingText = document.querySelector('.loading-text');
+                    if (loadingText) {
+                        loadingText.innerHTML = 'Menyimpan Sertifikat...<br>Mohon Tunggu Sebentar';
+                    }
+                }, 3000);
+
+                // Proses pembuatan sertifikat
+                await createCertificatePDF(certificateNumber, participantName, schoolOrigin);
+                
+            } catch (error) {
+                console.error('Error creating certificate:', error);
+                
+                // Tampilkan pesan error
+                modalContent.innerHTML = `
+                    <div class="loading-container">
+                        <div style="color: #e74c3c; font-size: 8px; line-height: 1.4; text-align: center;">
+                            Terjadi kesalahan saat membuat sertifikat.<br>
+                            Silakan coba lagi.
+                        </div>
+                        <button class="neobrutalism-button" onclick="closeConfirmModal()" style="margin-top: 20px; width: 100%;">
+                            Tutup
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+        }
+
+        // Template URLs untuk setiap sertifikat
+        const certificateTemplates = {
+            'Sertifikat 1': 'https://raw.githubusercontent.com/aprelryu21/gugusempat/main/Sertifikat%201.pdf',
+            'Sertifikat 2': 'https://raw.githubusercontent.com/aprelryu21/gugusempat/main/Sertifikat%201.pdf', // Sementara, akan diganti
+            'Sertifikat 3': 'https://raw.githubusercontent.com/aprelryu21/gugusempat/main/Sertifikat%201.pdf', // Sementara, akan diganti
+            'Sertifikat 4': 'https://raw.githubusercontent.com/aprelryu21/gugusempat/main/Sertifikat%201.pdf', // Sementara, akan diganti
+            'Sertifikat 5': 'https://raw.githubusercontent.com/aprelryu21/gugusempat/main/Sertifikat%201.pdf'  // Sementara, akan diganti
+        };
+
+        // Fungsi untuk membuat sertifikat PDF
+        async function createCertificatePDF(certificateNumber, participantName, schoolOrigin) {
+            try {
+                // Load PDF-lib
+                const { PDFDocument, rgb, StandardFonts } = PDFLib;
+                
+                // Pilih template berdasarkan sertifikat yang sedang aktif
+                const templateUrl = certificateTemplates[currentCertificate] || certificateTemplates['Sertifikat 1'];
+                
+                // Unduh template PDF
+                const response = await fetch(templateUrl);
+                if (!response.ok) {
+                    throw new Error('Gagal mengunduh template sertifikat');
+                }
+                
+                const existingPdfBytes = await response.arrayBuffer();
+                
+                // Load PDF document
+                const pdfDoc = await PDFDocument.load(existingPdfBytes);
+                
+                // Get first page
+                const pages = pdfDoc.getPages();
+                const firstPage = pages[0];
+                
+                // Embed fonts
+                let nameFont;
+                try {
+                    // Unduh font custom untuk nama dari direktori utama
+                    const fontResponse = await fetch('./font_nama.otf');
+                    if (fontResponse.ok) {
+                        const fontBytes = await fontResponse.arrayBuffer();
+                        nameFont = await pdfDoc.embedFont(fontBytes);
+                    } else {
+                        // Fallback ke font standar bold jika gagal
+                        nameFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+                    }
+                } catch (error) {
+                    // Fallback ke font standar bold jika terjadi error
+                    nameFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+                }
+                
+                const poppinsFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold); // Fallback untuk Poppins
+                
+                // Add certificate number (x:250pt, y:435pt, Poppins 16pt)
+                firstPage.drawText(`Nomor : ${certificateNumber}`, {
+                    x: 250,
+                    y: 435,
+                    size: 16,
+                    font: poppinsFont,
+                    color: rgb(0, 0, 0),
+                });
+                
+                // Add participant name (x:210pt, y:345pt, Custom font 30pt, orange color)
+                firstPage.drawText(participantName, {
+                    x: 210,
+                    y: 345,
+                    size: 30,
+                    font: nameFont, // Menggunakan font custom
+                    color: rgb(0.949, 0.576, 0.129), // #f29321 in RGB
+                });
+                
+                // Add school origin (x:210pt, y:310pt, Poppins 16pt, black, uppercase)
+                firstPage.drawText(schoolOrigin.toUpperCase(), {
+                    x: 210,
+                    y: 310,
+                    size: 16,
+                    font: poppinsFont,
+                    color: rgb(0, 0, 0),
+                });
+                
+                // Save PDF
+                const pdfBytes = await pdfDoc.save();
+                
+                // Create download link
+                const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+                const url = URL.createObjectURL(blob);
+                
+                // Create filename
+                const filename = `Sertifikat_${participantName.replace(/\s+/g, '_')}_${Date.now()}.pdf`;
+                
+                // Download file
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                
+                // Clean up
+                URL.revokeObjectURL(url);
+                
+                // Tutup modal setelah berhasil
+                setTimeout(() => {
+                    document.getElementById('confirmModalOverlay').style.display = 'none';
+                    
+                    // Reset konten modal untuk penggunaan berikutnya
+                    const modalContent = document.getElementById('confirmModalContent');
+                    modalContent.innerHTML = `
+                        <button class="modal-close" onclick="closeConfirmModal()">&times;</button>
+                        <div id="confirmTitle" class="confirm-title"></div>
+                        <div class="confirm-buttons">
+                            <button class="neobrutalism-button" onclick="closeConfirmModal()">
+                                Batal
+                            </button>
+                            <button class="neobrutalism-button" onclick="processCertificate()">
+                                Proses
+                            </button>
+                        </div>
+                    `;
+                    
+                    // Tampilkan pesan sukses
+                    const message = document.createElement('div');
+                    message.style.cssText = `
+                        position: fixed;
+                        top: 20px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        background: #4CAF50;
+                        color: white;
+                        padding: 15px 25px;
+                        border: 3px solid #000;
+                        box-shadow: 4px 4px 0px #333;
+                        font-family: 'Press Start 2P', monospace;
+                        font-size: 8px;
+                        z-index: 2000;
+                        max-width: 300px;
+                        text-align: center;
+                        line-height: 1.4;
+                    `;
+                    message.textContent = `Sertifikat untuk ${participantName} berhasil dibuat dan diunduh!`;
+                    
+                    document.body.appendChild(message);
+                    
+                    setTimeout(() => {
+                        document.body.removeChild(message);
+                    }, 4000);
+                    
+                    resetForm();
+                }, 1000);
+                
+            } catch (error) {
+                throw error;
+            }
+        }
+
+        // Mulai animasi saat halaman dimuat
+        window.addEventListener('load', () => {
+            startGlitchAnimation();
+        });
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99750bcfc7d08819',t:'MTc2MTkzMzU2NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
