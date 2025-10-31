@@ -596,7 +596,7 @@
    <div id="splashScreen" class="splash-screen">
     <div class="logo-container">
      <div style="display: flex; justify-content: center; margin-bottom: 30px;">
-      <div style="background: #f8f8f8; border: 4px solid #000; box-shadow: 8px 8px 0px #333; padding: 15px; display: inline-block;"><img src="https://raw.githubusercontent.com/aprelryu21/gugusempat/main/logo.png" alt="Logo Gugus 4 Widya Karya" style="display: block; width: 280px; height: auto; max-width: 100%;" onerror="this.style.display='none';">
+      <div style="background: #f8f8f8; border: 4px solid #000; box-shadow: 8px 8px 0px #333; padding: 15px 20px; display: inline-block; width: 320px; box-sizing: border-box;"><img src="https://raw.githubusercontent.com/aprelryu21/gugusempat/main/logo.png" alt="Logo Gugus 4 Widya Karya" style="display: block; width: 280px; height: auto; max-width: 100%;" onerror="this.style.display='none';">
       </div>
      </div>
      <div id="logoText" class="logo-text">
@@ -935,6 +935,15 @@
             }
         }
 
+        // Deskripsi untuk setiap sertifikat
+        const certificateDescriptions = {
+            'Sertifikat 1': 'Kegiatan sosialisasi pembelajaran inovatif dalam rangka peningkatan kualitas pendidikan di era digital. Program ini meliputi workshop teknologi pembelajaran, strategi pengajaran modern, dan implementasi kurikulum terbaru untuk menciptakan lingkungan belajar yang efektif dan menyenangkan.',
+            'Sertifikat 2': 'Workshop pengembangan media pembelajaran interaktif menggunakan teknologi multimedia. Kegiatan ini fokus pada pembuatan konten edukatif digital, penggunaan aplikasi pembelajaran, dan teknik presentasi yang menarik untuk meningkatkan engagement siswa dalam proses belajar mengajar.',
+            'Sertifikat 3': 'Pelatihan manajemen kelas dan strategi pembelajaran diferensiasi untuk mengakomodasi keberagaman gaya belajar siswa. Program mencakup teknik pengelolaan kelas yang efektif, penyusunan rencana pembelajaran yang adaptif, dan evaluasi pembelajaran yang komprehensif.',
+            'Sertifikat 4': 'Seminar nasional tentang implementasi kurikulum merdeka dan asesmen kompetensi minimum. Kegiatan ini membahas strategi penerapan kurikulum terbaru, teknik penilaian autentik, dan pengembangan profil pelajar Pancasila dalam konteks pembelajaran abad 21.',
+            'Sertifikat 5': 'Program peningkatan kompetensi guru dalam literasi digital dan penggunaan platform pembelajaran online. Meliputi pelatihan penggunaan Learning Management System, pembuatan konten digital interaktif, dan strategi pembelajaran hybrid yang efektif untuk era digital.'
+        };
+
         // Buka form sertifikat
         function openCertificateForm() {
             document.getElementById('modalOverlay').style.display = 'none';
@@ -946,6 +955,12 @@
             document.getElementById('formTitle').textContent = currentCertificate;
             document.getElementById('formDate').textContent = `Tanggal Pelaksanaan: ${currentDate}`;
             document.getElementById('certificateNumber').value = generateCertificateNumber();
+            
+            // Update deskripsi berdasarkan sertifikat yang dipilih
+            const descriptionText = document.querySelector('.description-text');
+            if (descriptionText && certificateDescriptions[currentCertificate]) {
+                descriptionText.textContent = certificateDescriptions[currentCertificate];
+            }
         }
 
         // Reset form
@@ -1196,5 +1211,5 @@
             startGlitchAnimation();
         });
     </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9975337450426141',t:'MTc2MTkzNTE4OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99754443c067fddf',t:'MTc2MTkzNTg3OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
