@@ -7,6 +7,7 @@
   <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/aprelryu21/gugusempat/main/favicon.png">
   <script src="/_sdk/element_sdk.js"></script>
   <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <script src="https://unpkg.com/@pdf-lib/fontkit@1.1.1/dist/fontkit.umd.min.js"></script>
   <style>
         @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
         
@@ -614,47 +615,47 @@
    <div id="certificateList" class="certificate-list">
     <div class="container">
      <div class="header neobrutalism-box">
-      <h1>Aplikasi Pembuat Sertifikat</h1>
+      <h1>Sertifikat Generator</h1>
       <h2>Gugus 4 Widya Karya</h2>
      </div>
-     <div class="certificate-item neobrutalism-box-light" onclick="showModal('Sertifikat 1', '15 November 2024')" style="box-shadow: 6px 6px 0px #ff6b6b;">
+     <div class="certificate-item neobrutalism-box-light" onclick="showModal('Pembelajaran Mendalam', '04 November 2025')" style="box-shadow: 6px 6px 0px #ff6b6b;">
       <div class="certificate-title">
-       Sertifikat 1
+       Pembelajaran Mendalam
       </div>
       <div class="certificate-date">
-       Tanggal Pelaksanaan: 15 November 2024
+       Tanggal Pelaksanaan: 04 November 2025
       </div>
      </div>
-     <div class="certificate-item neobrutalism-box-light" onclick="showModal('Sertifikat 2', '20 November 2024')" style="box-shadow: 6px 6px 0px #4ecdc4;">
+     <div class="certificate-item neobrutalism-box-light" onclick="showModal('Digitalisasi Pembelajaran', '04 November 2025')" style="box-shadow: 6px 6px 0px #4ecdc4;">
       <div class="certificate-title">
-       Sertifikat 2
+       Digitalisasi Pembelajaran
       </div>
       <div class="certificate-date">
-       Tanggal Pelaksanaan: 20 November 2024
+       Tanggal Pelaksanaan: 04 November 2025
       </div>
      </div>
-     <div class="certificate-item neobrutalism-box-light" onclick="showModal('Sertifikat 3', '25 November 2024')" style="box-shadow: 6px 6px 0px #45b7d1;">
+     <div class="certificate-item neobrutalism-box-light" onclick="showModal('Sertifikat 3', 'Menyusul')" style="box-shadow: 6px 6px 0px #45b7d1;">
       <div class="certificate-title">
        Sertifikat 3
       </div>
       <div class="certificate-date">
-       Tanggal Pelaksanaan: 25 November 2024
+       Tanggal Pelaksanaan: Menyusul
       </div>
      </div>
-     <div class="certificate-item neobrutalism-box-light" onclick="showModal('Sertifikat 4', '30 November 2024')" style="box-shadow: 6px 6px 0px #f9ca24;">
+     <div class="certificate-item neobrutalism-box-light" onclick="showModal('Sertifikat 4', 'Menyusul')" style="box-shadow: 6px 6px 0px #f9ca24;">
       <div class="certificate-title">
        Sertifikat 4
       </div>
       <div class="certificate-date">
-       Tanggal Pelaksanaan: 30 November 2024
+       Tanggal Pelaksanaan: Menyusul
       </div>
      </div>
-     <div class="certificate-item neobrutalism-box-light" onclick="showModal('Sertifikat 5', '5 Desember 2024')" style="box-shadow: 6px 6px 0px #a55eea;">
+     <div class="certificate-item neobrutalism-box-light" onclick="showModal('Sertifikat 5', 'Menyusul')" style="box-shadow: 6px 6px 0px #a55eea;">
       <div class="certificate-title">
        Sertifikat 5
       </div>
       <div class="certificate-date">
-       Tanggal Pelaksanaan: 5 Desember 2024
+       Tanggal Pelaksanaan: Menyusul
       </div>
      </div>
      <div style="text-align: center; margin-top: 20px; padding: 15px; font-size: 7px; color: #666; line-height: 1.4;">
@@ -672,44 +673,44 @@
       <h1>Dokumentasi Kegiatan</h1>
       <h2>Gugus 4 Widya Karya</h2>
      </div>
-     <div class="certificate-item neobrutalism-box-light" onclick="showDocModal('Kegiatan 1', '10 November 2024', 'https://drive.google.com/drive/folders/kegiatan1')" style="box-shadow: 6px 6px 0px #e67e22;">
+     <div class="certificate-item neobrutalism-box-light" onclick="showDocModal('Pembelajaran Mendalam', '04 November 2025', 'https://drive.google.com/drive/folders/kegiatan1_foto', 'https://drive.google.com/drive/folders/kegiatan1_materi')" style="box-shadow: 6px 6px 0px #e67e22;">
       <div class="certificate-title">
-       Kegiatan 1
+       Pembelajaran Mendalam
       </div>
       <div class="certificate-date">
-       Tanggal Pelaksanaan: 10 November 2024
+       Tanggal Pelaksanaan: 04 November 2025
       </div>
      </div>
-     <div class="certificate-item neobrutalism-box-light" onclick="showDocModal('Kegiatan 2', '15 November 2024', 'https://drive.google.com/drive/folders/kegiatan2')" style="box-shadow: 6px 6px 0px #27ae60;">
+     <div class="certificate-item neobrutalism-box-light" onclick="showDocModal('Digitalisasi Pembelajaran', '04 November 2025', 'https://drive.google.com/drive/folders/kegiatan2_foto', 'https://drive.google.com/drive/folders/kegiatan2_materi')" style="box-shadow: 6px 6px 0px #27ae60;">
       <div class="certificate-title">
-       Kegiatan 2
+       Digitalisasi Pembelajaran
       </div>
       <div class="certificate-date">
-       Tanggal Pelaksanaan: 15 November 2024
+       Tanggal Pelaksanaan: 04 November 2025
       </div>
      </div>
-     <div class="certificate-item neobrutalism-box-light" onclick="showDocModal('Kegiatan 3', '20 November 2024', 'https://drive.google.com/drive/folders/kegiatan3')" style="box-shadow: 6px 6px 0px #8e44ad;">
+     <div class="certificate-item neobrutalism-box-light" onclick="showDocModal('Kegiatan 3', 'Menyusul', 'https://drive.google.com/drive/folders/kegiatan3_foto', 'https://drive.google.com/drive/folders/kegiatan3_materi')" style="box-shadow: 6px 6px 0px #8e44ad;">
       <div class="certificate-title">
        Kegiatan 3
       </div>
       <div class="certificate-date">
-       Tanggal Pelaksanaan: 20 November 2024
+       Tanggal Pelaksanaan: Menyusul
       </div>
      </div>
-     <div class="certificate-item neobrutalism-box-light" onclick="showDocModal('Kegiatan 4', '25 November 2024', 'https://drive.google.com/drive/folders/kegiatan4')" style="box-shadow: 6px 6px 0px #c0392b;">
+     <div class="certificate-item neobrutalism-box-light" onclick="showDocModal('Kegiatan 4', 'Menyusul', 'https://drive.google.com/drive/folders/kegiatan4_foto', 'https://drive.google.com/drive/folders/kegiatan4_materi')" style="box-shadow: 6px 6px 0px #c0392b;">
       <div class="certificate-title">
        Kegiatan 4
       </div>
       <div class="certificate-date">
-       Tanggal Pelaksanaan: 25 November 2024
+       Tanggal Pelaksanaan: Menyusul
       </div>
      </div>
-     <div class="certificate-item neobrutalism-box-light" onclick="showDocModal('Kegiatan 5', '30 November 2024', 'https://drive.google.com/drive/folders/kegiatan5')" style="box-shadow: 6px 6px 0px #2c3e50;">
+     <div class="certificate-item neobrutalism-box-light" onclick="showDocModal('Kegiatan 5', 'Menyusul', 'https://drive.google.com/drive/folders/kegiatan5_foto', 'https://drive.google.com/drive/folders/kegiatan5_materi')" style="box-shadow: 6px 6px 0px #2c3e50;">
       <div class="certificate-title">
        Kegiatan 5
       </div>
       <div class="certificate-date">
-       Tanggal Pelaksanaan: 30 November 2024
+       Tanggal Pelaksanaan: Menyusul
       </div>
      </div>
      <div style="text-align: center; margin-top: 20px; padding: 15px; font-size: 7px; color: #666; line-height: 1.4;">
@@ -751,7 +752,9 @@
    <div id="docModalOverlay" class="modal-overlay" onclick="closeDocModal(event)">
     <div class="modal" onclick="event.stopPropagation()"><button class="modal-close" onclick="closeDocModal()">×</button>
      <div id="docModalTitle" class="modal-title"></div>
-     <div id="docModalDate" class="modal-date"></div><button class="neobrutalism-button" onclick="openDocumentation()" style="width: 100%;"> BUKA </button>
+     <div id="docModalDate" class="modal-date"></div>
+     <div style="display: flex; gap: 10px; margin-top: 15px;"><button class="neobrutalism-button" onclick="openDocumentation()" style="flex: 1; font-size: 8px;"> FOTO </button> <button class="neobrutalism-button" onclick="openMateri()" style="flex: 1; font-size: 8px; background: linear-gradient(135deg, #e67e22 0%, #d35400 100%); box-shadow: 4px 4px 0px #a0522d;"> MATERI </button>
+     </div>
     </div>
    </div><!-- Modal Konfirmasi Sertifikat -->
    <div id="confirmModalOverlay" class="modal-overlay" onclick="closeConfirmModal(event)">
@@ -768,6 +771,7 @@
         let currentDocActivity = '';
         let currentDocDate = '';
         let currentDocLink = '';
+        let currentMateriLink = '';
 
         // Konfigurasi default
         const defaultConfig = {
@@ -877,10 +881,11 @@
         }
 
         // Tampilkan modal dokumentasi
-        function showDocModal(activityName, date, link) {
+        function showDocModal(activityName, date, link, materiLink) {
             currentDocActivity = activityName;
             currentDocDate = date;
             currentDocLink = link;
+            currentMateriLink = materiLink;
             
             document.getElementById('docModalTitle').textContent = 
                 `Anda Akan Membuka Dokumentasi ${activityName}`;
@@ -899,6 +904,12 @@
         // Buka dokumentasi (redirect ke Google Drive)
         function openDocumentation() {
             window.open(currentDocLink, '_blank', 'noopener,noreferrer');
+            document.getElementById('docModalOverlay').style.display = 'none';
+        }
+
+        // Buka materi (redirect ke link materi)
+        function openMateri() {
+            window.open(currentMateriLink, '_blank', 'noopener,noreferrer');
             document.getElementById('docModalOverlay').style.display = 'none';
         }
 
@@ -937,11 +948,11 @@
 
         // Deskripsi untuk setiap sertifikat
         const certificateDescriptions = {
-            'Sertifikat 1': 'Kegiatan sosialisasi pembelajaran inovatif dalam rangka peningkatan kualitas pendidikan di era digital. Program ini meliputi workshop teknologi pembelajaran, strategi pengajaran modern, dan implementasi kurikulum terbaru untuk menciptakan lingkungan belajar yang efektif dan menyenangkan.',
-            'Sertifikat 2': 'Workshop pengembangan media pembelajaran interaktif menggunakan teknologi multimedia. Kegiatan ini fokus pada pembuatan konten edukatif digital, penggunaan aplikasi pembelajaran, dan teknik presentasi yang menarik untuk meningkatkan engagement siswa dalam proses belajar mengajar.',
-            'Sertifikat 3': 'Pelatihan manajemen kelas dan strategi pembelajaran diferensiasi untuk mengakomodasi keberagaman gaya belajar siswa. Program mencakup teknik pengelolaan kelas yang efektif, penyusunan rencana pembelajaran yang adaptif, dan evaluasi pembelajaran yang komprehensif.',
-            'Sertifikat 4': 'Seminar nasional tentang implementasi kurikulum merdeka dan asesmen kompetensi minimum. Kegiatan ini membahas strategi penerapan kurikulum terbaru, teknik penilaian autentik, dan pengembangan profil pelajar Pancasila dalam konteks pembelajaran abad 21.',
-            'Sertifikat 5': 'Program peningkatan kompetensi guru dalam literasi digital dan penggunaan platform pembelajaran online. Meliputi pelatihan penggunaan Learning Management System, pembuatan konten digital interaktif, dan strategi pembelajaran hybrid yang efektif untuk era digital.'
+            'Pembelajaran Mendalam': 'Kegiatan Sosialisasi dan Diseminasi Peningkatan Kompetensi Pedagogik Guru dalam Merancang Pembelajaran Mendalam dilaksanakan untuk meningkatkan kemampuan guru dalam merancang proses belajar yang berpusat pada siswa. Melalui kegiatan ini, guru dibimbing memahami prinsip dan penerapan pembelajaran mendalam yang berkesadaran, bermakna, dan menggembirakan, sehingga mampu menciptakan pengalaman belajar yang lebih reflektif dan relevan bagi peserta didik.',
+            'Digitalisasi Pembelajaran': 'Kegiatan Diseminasi Pemanfaatan Teknologi Digital untuk Peningkatan Kualitas Pembelajaran bertujuan meningkatkan kompetensi guru dalam memanfaatkan teknologi sebagai sarana inovasi pembelajaran. Melalui kegiatan ini, guru diperkenalkan dengan berbagai platform dan aplikasi digital yang dapat mendukung proses belajar mengajar agar lebih interaktif, efisien, dan relevan dengan kebutuhan peserta didik di era digital.',
+            'Sertifikat 3': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc a tincidunt euismod, justo tortor malesuada risus, sit amet dignissim purus turpis et sapien. Nulla facilisi. Phasellus ut tristique ex, in tincidunt eros',
+            'Sertifikat 4': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc a tincidunt euismod, justo tortor malesuada risus, sit amet dignissim purus turpis et sapien. Nulla facilisi. Phasellus ut tristique ex, in tincidunt eros',
+            'Sertifikat 5': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nunc a tincidunt euismod, justo tortor malesuada risus, sit amet dignissim purus turpis et sapien. Nulla facilisi. Phasellus ut tristique ex, in tincidunt eros'
         };
 
         // Buka form sertifikat
@@ -1054,11 +1065,11 @@
 
         // Template URLs untuk setiap sertifikat
         const certificateTemplates = {
-            'Sertifikat 1': 'https://raw.githubusercontent.com/aprelryu21/gugusempat/main/Sertifikat%201.pdf',
-            'Sertifikat 2': 'https://raw.githubusercontent.com/aprelryu21/gugusempat/main/Sertifikat%201.pdf', // Sementara, akan diganti
-            'Sertifikat 3': 'https://raw.githubusercontent.com/aprelryu21/gugusempat/main/Sertifikat%201.pdf', // Sementara, akan diganti
-            'Sertifikat 4': 'https://raw.githubusercontent.com/aprelryu21/gugusempat/main/Sertifikat%201.pdf', // Sementara, akan diganti
-            'Sertifikat 5': 'https://raw.githubusercontent.com/aprelryu21/gugusempat/main/Sertifikat%201.pdf'  // Sementara, akan diganti
+            'Sertifikat 1': 'https://raw.githubusercontent.com/aprelryu21/gugusempat/main/Sertifikat%20Contoh.pdf',
+            'Sertifikat 2': 'https://raw.githubusercontent.com/aprelryu21/gugusempat/main/Sertifikat%20Contoh.pdf', 
+            'Sertifikat 3': 'https://raw.githubusercontent.com/aprelryu21/gugusempat/main/Sertifikat%20Contoh.pdf', 
+            'Sertifikat 4': 'https://raw.githubusercontent.com/aprelryu21/gugusempat/main/Sertifikat%20Contoh.pdf', 
+            'Sertifikat 5': 'https://raw.githubusercontent.com/aprelryu21/gugusempat/main/Sertifikat%20Contoh.pdf'  
         };
 
         // Fungsi untuk membuat sertifikat PDF
@@ -1081,6 +1092,9 @@
                 // Load PDF document
                 const pdfDoc = await PDFDocument.load(existingPdfBytes);
                 
+                // Register fontkit untuk mendukung font custom
+                pdfDoc.registerFontkit(fontkit);
+                
                 // Get first page
                 const pages = pdfDoc.getPages();
                 const firstPage = pages[0];
@@ -1088,8 +1102,8 @@
                 // Embed fonts
                 let nameFont;
                 try {
-                    // Unduh font custom untuk nama dari direktori utama
-                    const fontResponse = await fetch('./font_nama.otf');
+                    // Unduh font custom untuk nama dari GitHub
+                    const fontResponse = await fetch('https://raw.githubusercontent.com/aprelryu21/gugusempat/main/fonts.ttf');
                     if (fontResponse.ok) {
                         const fontBytes = await fontResponse.arrayBuffer();
                         nameFont = await pdfDoc.embedFont(fontBytes);
@@ -1104,7 +1118,7 @@
                 
                 const poppinsFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold); // Fallback untuk Poppins
                 
-                // Add certificate number (x:250pt, y:435pt, Poppins 16pt)
+                // Add certificate number 
                 firstPage.drawText(`Nomor : ${certificateNumber}`, {
                     x: 250,
                     y: 435,
@@ -1113,16 +1127,25 @@
                     color: rgb(0, 0, 0),
                 });
                 
-                // Add participant name (x:210pt, y:345pt, Custom font 30pt, orange color)
+                // Add participant name shadow 
+                firstPage.drawText(participantName, {
+                    x: 211,
+                    y: 344,
+                    size: 45,
+                    font: nameFont, // Menggunakan font custom
+                    color: rgb(0.353, 0.204, 0.596), // #5a3498 shadow color
+                });
+                
+                // Add participant name 
                 firstPage.drawText(participantName, {
                     x: 210,
                     y: 345,
-                    size: 30,
+                    size: 45,
                     font: nameFont, // Menggunakan font custom
                     color: rgb(0.949, 0.576, 0.129), // #f29321 in RGB
                 });
                 
-                // Add school origin (x:210pt, y:310pt, Poppins 16pt, black, uppercase)
+                // Add school origin 
                 firstPage.drawText(schoolOrigin.toUpperCase(), {
                     x: 210,
                     y: 310,
@@ -1211,5 +1234,5 @@
             startGlitchAnimation();
         });
     </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99754443c067fddf',t:'MTc2MTkzNTg3OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9979ef56155bf888',t:'MTc2MTk4NDgyOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
