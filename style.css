@@ -1,0 +1,714 @@
+body {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Press Start 2P', monospace;
+    background-color: #f0f0f0;
+    min-height: 100%;
+    overflow-x: hidden;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+.container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.neobrutalism-box {
+    background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+    border: 4px solid #000;
+    box-shadow: 8px 8px 0px #666;
+    border-radius: 0;
+    position: relative;
+}
+
+.neobrutalism-box-light {
+    background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+    border: 4px solid #000;
+    box-shadow: 6px 6px 0px #ffffff;
+    border-radius: 0;
+}
+
+.certificate-form .neobrutalism-box-light {
+    box-shadow: 6px 6px 0px #ff6b6b;
+}
+
+.certificate-form .description-box {
+    box-shadow: 6px 6px 0px #4ecdc4;
+}
+
+.certificate-form .form-container {
+    box-shadow: 6px 6px 0px #45b7d1;
+}
+
+.neobrutalism-button {
+    background: linear-gradient(135deg, #4a4a4a 0%, #2a2a2a 100%);
+    border: 3px solid #000;
+    box-shadow: 4px 4px 0px #666;
+    color: white;
+    padding: 12px 20px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.neobrutalism-button:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px #666;
+}
+
+.neobrutalism-button:active {
+    transform: translate(4px, 4px);
+    box-shadow: 0px 0px 0px #666;
+}
+
+/* Halaman 1 - Splash Screen */
+.splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: #000000;
+    z-index: 1000;
+}
+
+.logo-container {
+    margin: 0 20px;
+    padding: 60px 40px;
+    width: calc(100% - 40px);
+    max-width: none;
+}
+
+.splash-logo-box {
+    background: #f8f8f8;
+    border: 4px solid #000;
+    box-shadow: 8px 8px 0px #333;
+    padding: 15px 20px;
+    display: inline-block;
+    width: 320px;
+    box-sizing: border-box;
+    margin-bottom: 30px;
+}
+
+.splash-logo-img {
+    display: block;
+    width: 280px;
+    height: auto;
+    max-width: 100%;
+}
+
+.logo-text {
+    color: white;
+    font-size: 18px;
+    line-height: 1.5;
+    margin-bottom: 40px;
+    animation: fadeInUp 1s ease-out;
+}
+
+.splash-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+.splash-button {
+    background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+    border: 4px solid #000;
+    box-shadow: 8px 8px 0px #333;
+    color: #000;
+    padding: 16px 32px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-weight: bold;
+}
+
+.splash-button:hover {
+    transform: translate(4px, 4px);
+    box-shadow: 4px 4px 0px #333;
+}
+
+.splash-button:active {
+    transform: translate(8px, 8px);
+    box-shadow: 0px 0px 0px #333;
+}
+
+.made-with-love {
+    text-align: center;
+    margin-top: 60px;
+    font-size: 7px;
+    color: white;
+    line-height: 1.4;
+}
+
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+.social-link {
+    display: flex;
+    align-items: center;
+    color: white;
+    padding: 10px 15px;
+    border: 2px solid #000;
+    box-shadow: 3px 3px 0px #ffffff;
+    text-decoration: none;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    transition: all 0.1s ease;
+}
+
+.social-link.instagram {
+    background: linear-gradient(135deg, #a55eea 0%, #8b4bc7 100%);
+}
+
+.social-link.tiktok {
+    background: linear-gradient(135deg, #000000 0%, #333333 100%);
+}
+
+.social-link.youtube {
+    background: linear-gradient(135deg, #FF0000 0%, #CC0000 100%);
+}
+
+.glitch {
+    animation: glitch 0.3s ease-in-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes glitch {
+    0% {
+        transform: translate(0);
+    }
+    20% {
+        transform: translate(-2px, 2px);
+    }
+    40% {
+        transform: translate(-2px, -2px);
+    }
+    60% {
+        transform: translate(2px, 2px);
+    }
+    80% {
+        transform: translate(2px, -2px);
+    }
+    100% {
+        transform: translate(0);
+    }
+}
+
+/* Halaman Konten (Daftar Sertifikat, Dokumentasi, Form) */
+.page-content {
+    display: none;
+    padding-bottom: 120px;
+}
+
+/* Footer Navigation */
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+    border: 4px solid #000;
+    box-shadow: 0px -8px 0px #000;
+    padding: 15px 20px;
+    z-index: 100;
+}
+
+.footer-nav {
+    display: flex;
+    gap: 8px;
+    justify-content: space-between;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.nav-button {
+    flex: 1;
+    border: 3px solid #000;
+    box-shadow: 4px 4px 0px #000;
+    color: white;
+    padding: 15px 8px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+}
+
+.nav-button:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px #000;
+}
+
+.nav-button:active {
+    transform: translate(4px, 4px);
+    box-shadow: 0px 0px 0px #000;
+}
+
+.nav-docs {
+    background: linear-gradient(135deg, #45b7d1 0%, #3498db 100%);
+}
+
+.nav-docs:hover {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+}
+
+.nav-home {
+    background: linear-gradient(135deg, #f9ca24 0%, #f0b90b 100%);
+}
+
+.nav-home:hover {
+    background: linear-gradient(135deg, #f0b90b 0%, #d4a017 100%);
+}
+
+.nav-cert {
+    background: linear-gradient(135deg, #a55eea 0%, #8b4bc7 100%);
+}
+
+.nav-cert:hover {
+    background: linear-gradient(135deg, #8b4bc7 0%, #6c3a9e 100%);
+}
+
+.nav-button.active.nav-docs {
+    background: linear-gradient(135deg, #2980b9 0%, #1f5f8b 100%);
+    color: white;
+}
+
+.nav-button.active.nav-home {
+    background: linear-gradient(135deg, #d4a017 0%, #b8860b 100%);
+    color: white;
+}
+
+.nav-button.active.nav-cert {
+    background: linear-gradient(135deg, #6c3a9e 0%, #4a2870 100%);
+    color: white;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    margin-left: -20px;
+    margin-right: -20px;
+}
+
+.header h1 {
+    color: white;
+    font-size: 14px;
+    margin: 0 0 12px 0;
+    line-height: 1.4;
+}
+
+.header h2 {
+    color: white;
+    font-size: 10px;
+    margin: 0;
+    opacity: 0.8;
+}
+
+.certificate-item {
+    margin-bottom: 15px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.1s ease;
+}
+
+.certificate-item:hover {
+    transform: translate(3px, 3px);
+}
+
+.certificate-item:nth-child(2):hover {
+    box-shadow: 3px 3px 0px #ff6b6b !important;
+}
+
+.certificate-item:nth-child(3):hover {
+    box-shadow: 3px 3px 0px #4ecdc4 !important;
+}
+
+.certificate-item:nth-child(4):hover {
+    box-shadow: 3px 3px 0px #45b7d1 !important;
+}
+
+.certificate-item:nth-child(5):hover {
+    box-shadow: 3px 3px 0px #f9ca24 !important;
+}
+
+.certificate-item:nth-child(6):hover {
+    box-shadow: 3px 3px 0px #a55eea !important;
+}
+
+.certificate-title {
+    font-size: 12px;
+    margin-bottom: 10px;
+    color: #333;
+    font-weight: bold;
+}
+
+.certificate-date {
+    font-size: 9px;
+    color: #666;
+}
+
+.made-with-love-footer {
+    text-align: center;
+    margin-top: 20px;
+    padding: 15px;
+    font-size: 7px;
+    color: #666;
+    line-height: 1.4;
+}
+
+/* Halaman Form Sertifikat */
+.form-header {
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 15px;
+    margin-left: -20px;
+    margin-right: -20px;
+}
+
+.form-header h1 {
+    color: white;
+    font-size: 10px;
+    margin: 0 0 8px 0;
+    line-height: 1.4;
+}
+
+.form-header h2 {
+    color: white;
+    font-size: 7px;
+    margin: 0;
+    opacity: 0.8;
+}
+
+.description-box {
+    margin-bottom: 25px;
+    padding: 15px;
+}
+
+.description-text {
+    font-size: 9px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.form-container {
+    margin-bottom: 25px;
+    padding: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-label {
+    display: block;
+    font-size: 8px;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px;
+    border: 3px solid #000;
+    box-shadow: 3px 3px 0px #f9ca24;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    background: white;
+    box-sizing: border-box;
+}
+
+.form-input:focus {
+    outline: none;
+    box-shadow: 1px 1px 0px #f9ca24;
+    transform: translate(2px, 2px);
+}
+
+.button-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.button-row .neobrutalism-button {
+    flex: 1;
+    font-size: 8px;
+    padding: 10px;
+}
+
+.btn-create {
+    background: linear-gradient(135deg, #a55eea 0%, #8b4bc7 100%);
+    box-shadow: 4px 4px 0px #6c3a9e;
+}
+
+.btn-create:hover {
+    box-shadow: 2px 2px 0px #6c3a9e;
+}
+
+.btn-back {
+    background: linear-gradient(135deg, #f9ca24 0%, #f0b90b 100%);
+    box-shadow: 4px 4px 0px #d4a017;
+    color: #000;
+}
+
+.btn-back:hover {
+    box-shadow: 2px 2px 0px #d4a017;
+}
+
+.btn-reset {
+    background: linear-gradient(135deg, #45b7d1 0%, #3498db 100%);
+    box-shadow: 4px 4px 0px #2980b9;
+}
+
+.btn-reset:hover {
+    box-shadow: 2px 2px 0px #2980b9;
+}
+
+/* Modal */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.modal {
+    background: white;
+    border: 4px solid #000;
+    box-shadow: 8px 8px 0px #666;
+    padding: 25px;
+    max-width: 350px;
+    width: 100%;
+    position: relative;
+}
+
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    font-family: 'Press Start 2P', monospace;
+}
+
+.modal-title {
+    font-size: 9px;
+    margin-bottom: 15px;
+    line-height: 1.4;
+    color: #333;
+}
+
+.modal-date {
+    font-size: 7px;
+    margin-bottom: 20px;
+    color: #666;
+}
+
+.doc-modal-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Modal Konfirmasi Sertifikat */
+.confirm-modal {
+    background: white;
+    border: 4px solid #000;
+    box-shadow: 8px 8px 0px #666;
+    padding: 25px;
+    max-width: 400px;
+    width: 100%;
+    position: relative;
+}
+
+.confirm-title {
+    font-size: 10px;
+    margin-bottom: 20px;
+    line-height: 1.4;
+    color: #333;
+    text-align: center;
+}
+
+.confirm-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.confirm-buttons .neobrutalism-button {
+    flex: 1;
+    font-size: 9px;
+    padding: 12px;
+}
+
+/* Loading Animation */
+.loading-container {
+    text-align: center;
+    padding: 30px;
+}
+
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #000;
+    border-top: 4px solid #fff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+.loading-text {
+    font-size: 8px;
+    color: #333;
+    line-height: 1.4;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 15px;
+    }
+    .logo-text {
+        font-size: 14px;
+    }
+    .header h1 {
+        font-size: 11px;
+    }
+    .certificate-title {
+        font-size: 9px;
+    }
+    .nav-button {
+        font-size: 8px;
+        padding: 12px 6px;
+    }
+    .footer-nav {
+        gap: 6px;
+    }
+}
+
+@media (max-width: 360px) {
+    .nav-button {
+        font-size: 7px;
+        padding: 10px 4px;
+    }
+    .footer-nav {
+        gap: 4px;
+    }
+}
+
+/* Animasi Transisi Halaman (View Transitions) */
+@keyframes slide-from-right {
+    from {
+        transform: translateX(50px);
+        opacity: 0;
+    }
+}
+
+@keyframes slide-to-left {
+    to {
+        transform: translateX(-50px);
+        opacity: 0;
+    }
+}
+
+::view-transition-old(root) {
+    animation: 180ms cubic-bezier(0.4, 0, 1, 1) both slide-to-left;
+    z-index: 1;
+}
+
+::view-transition-new(root) {
+    animation: 180ms cubic-bezier(0, 0, 0.2, 1) both slide-from-right;
+    z-index: 999;
+}
+
+/* Khusus untuk kembali ke splash screen, gunakan fade */
+.splash-transition::view-transition-new(root) {
+    animation: 300ms ease-in both fade-in;
+}
+
+/* Kontak WhatsApp di Splash Screen */
+.whatsapp-contact {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 8px;
+    color: #ccc;
+    padding: 0 20px;
+    line-height: 1.6;
+}
+
+.whatsapp-contact a {
+    color: #25D366; /* Warna hijau WhatsApp */
+    text-decoration: none;
+    border-bottom: 2px solid #25D366;
+    font-weight: bold;
+    transition: all 0.1s ease;
+    padding-bottom: 1px;
+}
