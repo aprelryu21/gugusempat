@@ -26,7 +26,7 @@ const certificateDescriptions = {
 
 // Template URLs for each certificate
 const certificateTemplates = {
-    'Pembelajaran Mendalam': 'https://raw.githubusercontent.com/aprelryu21/gugusempat/main/Sertifikat%20Contoh.pdf',
+    'Pembelajaran Mendalam': 'https://raw.githubusercontent.com/aprelryu21/gugusempat/main/sertifikat-pm.pdf',
     'Digitalisasi Pembelajaran': 'https://raw.githubusercontent.com/aprelryu21/gugusempat/main/Sertifikat%20Contoh.pdf', // Ganti dengan URL yang sesuai
     'Sertifikat 3': 'https://raw.githubusercontent.com/aprelryu21/gugusempat/main/Sertifikat%20Contoh.pdf',
     'Sertifikat 4': 'https://raw.githubusercontent.com/aprelryu21/gugusempat/main/Sertifikat%20Contoh.pdf',
@@ -470,3 +470,4 @@ window.addEventListener('load', () => {
         footer.style.display = 'block';
     }
 });
+
