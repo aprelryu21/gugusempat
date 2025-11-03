@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="id">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dokumentasi - GUGUS 4 WIDYA KARYA</title>
+  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/aprelryu21/gugusempat/main/favicon.png">
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <script src="https://unpkg.com/@pdf-lib/fontkit@1.1.1/dist/fontkit.umd.min.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
+  <link rel="stylesheet" href="style.css">
+  <style>@view-transition { navigation: auto; }</style>
+ </head>
+ <body>
+  <main>
+   <!-- Halaman Dokumentasi -->
+   <div id="documentationPage" class="page-content" style="display: block;">
+    <div class="container">
+     <div class="header neobrutalism-box">
+      <h1>Dokumentasi Kegiatan</h1>
+      <h2>Gugus 4 Widya Karya</h2>
+     </div>
+     <div class="certificate-item neobrutalism-box-light" onclick="showDocModal('Kegiatan KKG Gugus 4', '04 November 2025', 'https://drive.google.com/drive/folders/kegiatan1_foto', 'https://drive.google.com/drive/folders/kegiatan1_materi')" style="box-shadow: 6px 6px 0px #e67e22;">
+      <div class="certificate-title">
+       Kegiatan KKG Gugus 4
+      </div>
+      <div class="certificate-date">
+       Tanggal Pelaksanaan: 04 November 2025
+      </div>
+     </div>
+     <div class="certificate-item neobrutalism-box-light item-disabled" style="box-shadow: 6px 6px 0px #27ae60;">
+      <div class="certificate-title">
+       Kegiatan 2
+      </div>
+      <div class="certificate-date">
+       Tanggal Pelaksanaan: Menyusul
+      </div>
+     </div>
+     <div class="certificate-item neobrutalism-box-light item-disabled" style="box-shadow: 6px 6px 0px #8e44ad;">
+      <div class="certificate-title">
+       Kegiatan 3
+      </div>
+      <div class="certificate-date">
+       Tanggal Pelaksanaan: Menyusul
+      </div>
+     </div>
+     <div class="certificate-item neobrutalism-box-light item-disabled" style="box-shadow: 6px 6px 0px #c0392b;">
+      <div class="certificate-title">
+       Kegiatan 4
+      </div>
+      <div class="certificate-date">
+       Tanggal Pelaksanaan: Menyusul
+      </div>
+     </div>
+     <div class="certificate-item neobrutalism-box-light item-disabled" style="box-shadow: 6px 6px 0px #2c3e50;">
+      <div class="certificate-title">
+       Kegiatan 5
+      </div>
+      <div class="certificate-date">
+       Tanggal Pelaksanaan: Menyusul
+      </div>
+     </div>
+     <div class="made-with-love-footer">
+      ❤️ Made With Mumet By AprelRYU ❤️
+     </div>
+    </div>
+   </div>
+
+   <!-- Fixed Footer Navigation -->
+   <div id="fixedFooter" class="footer">
+    <div class="footer-nav">
+     <a href="dokumentasi.html" class="nav-button nav-docs active">Dokumentasi</a>
+     <a href="index.html" class="nav-button nav-home">Beranda</a>
+     <a href="sertifikat.html" class="nav-button nav-cert">Sertifikat</a>
+    </div>
+   </div>
+
+   <!-- Modal Dokumentasi -->
+   <div id="docModalOverlay" class="modal-overlay" onclick="closeDocModal(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+     <button class="modal-close" onclick="closeDocModal()">×</button>
+     <div id="docModalTitle" class="modal-title"></div>
+     <div id="docModalDate" class="modal-date"></div>
+     <div class.doc-modal-buttons">
+      <button class="neobrutalism-button" onclick="openDocumentation()" style="flex: 1; font-size: 8px;"> FOTO </button>
+      <button class="neobrutalism-button" onclick="openMateri()" style="flex: 1; font-size: 8px; background: linear-gradient(135deg, #e67e22 0%, #d35400 100%); box-shadow: 4px 4px 0px #a0522d;"> MATERI </button>
+     </div>
+    </div>
+   </div>
+  </main>
+  <script src="script.js"></script>
+ </body>
+</html>
