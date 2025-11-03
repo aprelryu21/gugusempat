@@ -39,7 +39,7 @@
         <label class="form-label" for="schoolOrigin">Asal Sekolah</label>
         <input type="text" id="schoolOrigin" class="form-input" placeholder="Masukkan asal sekolah" required>
        </div>
-       <button type="submit" class="neobrutalism-button btn-create" style="width: 100%; margin-bottom: 15px;"> Buat Sertifikat </button>
+       <button type="submit" class="neobrutalism-button btn-create" style="width: 100%; margin-bottom: 15px;" disabled> Buat Sertifikat </button>
       </form>
       <div class="button-row">
        <a href="sertifikat.html" class="neobrutalism-button btn-back"> Kembali </a>
@@ -66,6 +66,19 @@
      <div class="confirm-buttons">
       <button class="neobrutalism-button" onclick="closeConfirmModal()"> Batal </button>
       <button class="neobrutalism-button" onclick="processCertificate()"> Proses </button>
+     </div>
+    </div>
+   </div>
+
+   <!-- Modal Notifikasi Error -->
+   <div id="errorModalOverlay" class="modal-overlay" onclick="closeErrorModal(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+     <button class="modal-close" onclick="closeErrorModal()">×</button>
+     <div class="modal-title" style="color: #e74c3c;">Gagal Memuat Nomor</div>
+     <div class="modal-date">Nomor sertifikat gagal dibuat secara otomatis. Silakan coba lagi.</div>
+     <div class="confirm-buttons">
+      <button class="neobrutalism-button" onclick="location.reload()">Refresh Halaman</button>
+      <button class="neobrutalism-button" onclick="retryNumberGeneration()">Coba Lagi</button>
      </div>
     </div>
    </div>
