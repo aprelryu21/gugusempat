@@ -74,6 +74,12 @@ body {
     box-shadow: 0px 0px 0px #666;
 }
 
+.neobrutalism-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
 /* Halaman 1 - Splash Screen */
 .splash-screen {
     position: fixed;
