@@ -140,6 +140,23 @@ function closeConfirmModal(event) {
     }
 }
 
+function showNumberErrorModal() {
+    document.getElementById('errorModalOverlay').style.display = 'flex';
+}
+
+function closeErrorModal(event) {
+    const overlay = document.getElementById('errorModalOverlay');
+    if (!event || event.target === overlay) {
+        overlay.style.display = 'none';
+    }
+}
+
+function retryNumberGeneration() {
+    closeErrorModal();
+    // Panggil resetForm lagi untuk mencoba generate nomor baru
+    resetForm();
+}
+
 // --- CERTIFICATE FORM ---
 
 async function generateUniqueCertificateNumber() {
@@ -167,6 +184,9 @@ async function resetForm() {
     document.getElementById('participantName').value = '';
     document.getElementById('schoolOrigin').value = '';
 
+    // Pastikan tombol create dinonaktifkan saat form di-reset
+    checkFormCompleteness();
+
     const certNumberInput = document.getElementById('certificateNumber');
     certNumberInput.value = "Tunggu, Nomor Sertifikat Sedang Dibuat...";
     certNumberInput.classList.add('input-loading');
@@ -174,6 +194,27 @@ async function resetForm() {
     const newNumber = await generateUniqueCertificateNumber();
     certNumberInput.value = newNumber;
     certNumberInput.classList.remove('input-loading');
+
+    // Periksa apakah nomor berhasil dibuat
+    if (newNumber.includes("Error")) {
+        showNumberErrorModal();
+    }
+
+    // Periksa kembali kelengkapan form setelah nomor didapatkan
+    checkFormCompleteness();
+}
+
+function checkFormCompleteness() {
+    const certNumber = document.getElementById('certificateNumber').value;
+    const participantName = document.getElementById('participantName').value;
+    const schoolOrigin = document.getElementById('schoolOrigin').value;
+    const createButton = document.querySelector('.btn-create');
+
+    // Kondisi untuk mengaktifkan tombol
+    const isNumberValid = certNumber && !certNumber.includes("Tunggu") && !certNumber.includes("Error");
+    const isFormFilled = participantName.trim() !== '' && schoolOrigin.trim() !== '';
+
+    createButton.disabled = !(isNumberValid && isFormFilled);
 }
 
 function createCertificate(event) {
@@ -414,6 +455,10 @@ window.addEventListener('load', () => {
         if (descriptionText) {
             descriptionText.textContent = certificateDescriptions[appState.currentCertificate] || 'Deskripsi tidak tersedia.';
         }
+
+        // Tambahkan event listener untuk memeriksa kelengkapan form setiap kali user mengetik
+        document.getElementById('participantName').addEventListener('input', checkFormCompleteness);
+        document.getElementById('schoolOrigin').addEventListener('input', checkFormCompleteness);
 
         // Panggil resetForm untuk mengisi nomor sertifikat saat halaman dimuat
         resetForm();
