@@ -42,7 +42,7 @@ const photoDocumentationData = {
     'kkg_gugus_4': {
         title: 'Dokumentasi Foto',
         subtitle: 'KKG Gugus 4 Widya Karya Tanggal 04 November 2025',
-        googleDriveFolderId: '1-3b_Vv2Sg-mYk_x9XzYq_Zz3j_4J5K6L',
+        googleDriveFolderId: '1PQZqT3iblM0QiGlLOFjOJjXr95ZhirZc', // Ganti dengan ID folder yang benar, contoh: '1_abcdefg...'
         highlightPhotos: [], // Akan diisi dari Google Drive
         carouselPhotos: []   // Akan diisi dari Google Drive
     },
@@ -518,21 +518,23 @@ window.addEventListener('load', () => {
             return []; // Kembalikan array kosong jika API Key tidak ada
         }
 
-        const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+(mimeType='image/jpeg'+or+mimeType='image/png')&key=${GOOGLE_API_KEY}&fields=files(id,name)`;
+        // Meminta webContentLink yang merupakan link download langsung untuk file yang dapat diakses publik.
+        const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+(mimeType='image/jpeg'+or+mimeType='image/png')&key=${GOOGLE_API_KEY}&fields=files(id,name,webContentLink)`;
 
         try {
             const response = await fetch(url);
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(`Gagal mengambil data dari Google Drive: ${errorData.error.message}`);
+                // Memberikan pesan error yang lebih jelas jika folder tidak ditemukan atau akses ditolak
+                throw new Error(`Gagal mengambil data dari Google Drive: ${errorData.error.message}. Pastikan folder ID benar dan folder telah dibagikan untuk 'Siapa saja yang memiliki link'.`);
             }
             const data = await response.json();
             // Ubah data mentah menjadi format URL yang bisa ditampilkan
             return data.files.map(file => ({
                 id: file.id,
                 name: file.name,
-                // URL ini adalah format untuk menampilkan gambar dari Google Drive secara langsung
-                url: `https://lh3.googleusercontent.com/d/${file.id}`
+                // Gunakan webContentLink sebagai URL gambar. Ini adalah link download langsung.
+                url: file.webContentLink
             }));
         } catch (error) {
             console.error("Error saat mengambil data dari Google Drive:", error);
