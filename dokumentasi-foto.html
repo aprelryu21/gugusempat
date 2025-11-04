@@ -18,23 +18,23 @@
       <h2 id="photoHeaderSubtitle">Mohon tunggu sebentar</h2>
      </div>
 
-     <!-- Photo Grid Container -->
-     <div class="photo-grid">
-      <!-- Foto highlight akan di-generate oleh JavaScript -->
-      <div class="photo-placeholder">Memuat foto highlight...</div>
+     <!-- Grid Foto Highlight (TAHAP 3) -->
+     <div class="highlight-grid">
+      <!-- Placeholder saat memuat -->
+      <div class="photo-placeholder" style="grid-column: 1 / -1;">Memuat foto highlight...</div>
      </div>
 
-     <!-- Carousel Container untuk foto lainnya -->
-     <div class="carousel-wrapper neobrutalism-box-light" style="box-shadow: 6px 6px 0px #3498db;">
-      <h3 class="carousel-title">Foto Lainnya</h3>
-      <div class="carousel-viewer">
-       <div class="carousel-slides">
-        <div class="carousel-placeholder">Foto lainnya akan muncul di sini.</div>
-       </div>
-      </div>
-      <div class="carousel-nav">
-       <button class="carousel-button prev" disabled>Prev</button>
-       <button class="carousel-button next" disabled>Next</button>
+     <!-- Wadah Foto Tunggal (Pengganti Grid dan Carousel) -->
+     <div id="photo-viewer" class="neobrutalism-box-light" style="box-shadow: 6px 6px 0px #3498db;">
+      <!-- Gambar akan ditampilkan di sini oleh JavaScript -->
+      <div class="photo-placeholder">Memuat foto...</div>
+     </div>
+
+     <!-- Navigasi Foto -->
+     <div class="photo-navigation">
+      <button id="prevButton" class="nav-button" disabled>Sebelumnya</button>
+      <div id="photoCounter" class="photo-counter">0 / 0</div>
+      <button id="nextButton" class="nav-button" disabled>Selanjutnya</button>
       </div>
      </div>
 

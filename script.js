@@ -67,6 +67,13 @@ const photoDocumentationData = {
         highlightPhotos: [],
         carouselPhotos: []
     },
+    'kegiatan_5': {
+        title: 'Dokumentasi Kegiatan 5',
+        subtitle: 'Tanggal Menyusul',
+        googleDriveFolderId: 'Folder',
+        highlightPhotos: [],
+        carouselPhotos: []
+    },
 };
 
 // Initialize SDK
@@ -147,8 +154,8 @@ function showDocModal(activityName, date, link, materiLink) {
     appState.currentDocLink = link;
     appState.currentMateriLink = materiLink;
 
-    document.getElementById('docModalTitle').textContent = `Anda Akan Membuka Dokumentasi ${activityName}`;
-    document.getElementById('docModalDate').textContent = `Yang Dilaksanakan Pada ${date}`;
+    document.getElementById('docModalTitle').textContent = `Anda Akan Membuka Dokumentasi `;
+    document.getElementById('docModalDate').textContent = `Yang Dilaksanakan Pada `;
     document.getElementById('docModalOverlay').style.display = 'flex';
 }
 
@@ -265,7 +272,7 @@ function createCertificate(event) {
 
     if (participantName && schoolOrigin) {
         document.getElementById('confirmTitle').textContent =
-            `Sertifikat Atas Nama ${participantName} Yang Berasal Dari ${schoolOrigin} Akan Diproses. Apakah Anda Ingin Melanjutkan?`;
+            `Sertifikat Atas Nama  Yang Berasal Dari  Akan Diproses. Apakah Anda Ingin Melanjutkan?`;
         document.getElementById('confirmModalOverlay').style.display = 'flex';
     }
 }
@@ -380,7 +387,7 @@ async function createCertificatePDF() {
     const firstPage = pdfDoc.getPages()[0];
 
     // Certificate Number
-    firstPage.drawText(`Nomor : ${certificateNumber}`, {
+    firstPage.drawText(`Nomor : `, {
         x: 250,
         y: 435,
         size: 16,
@@ -468,7 +475,7 @@ function showSuccessMessage(participantName) {
         font-family: 'Press Start 2P', monospace; font-size: 8px;
         z-index: 2000; max-width: 300px; text-align: center; line-height: 1.4;
     `;
-    message.textContent = `Sertifikat untuk ${participantName} berhasil dibuat dan diunduh!`;
+    message.textContent = `Sertifikat untuk  berhasil dibuat dan diunduh!`;
     document.body.appendChild(message);
 
     setTimeout(() => {
@@ -519,7 +526,7 @@ window.addEventListener('load', () => {
         }
 
         // Kita hanya butuh ID dan nama file. URL akan kita buat sendiri.
-        const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+(mimeType='image/jpeg'+or+mimeType='image/png')&key=${GOOGLE_API_KEY}&fields=files(id,name)`;
+        const url = `https://www.googleapis.com/drive/v3/files?q=''+in+parents+and+(mimeType='image/jpeg'+or+mimeType='image/png')&key=&fields=files(id,name)`;
 
         try {
             const response = await fetch(url);
@@ -561,7 +568,7 @@ window.addEventListener('load', () => {
     }
 
     // Inisialisasi untuk halaman dokumentasi foto (dokumentasi-foto.html)
-    if (document.querySelector('.photo-grid')) {
+    if (document.getElementById('photo-viewer')) {
         const params = new URLSearchParams(window.location.search);
         const activityId = params.get('kegiatan');
         const activityData = photoDocumentationData[activityId];
@@ -570,7 +577,7 @@ window.addEventListener('load', () => {
             // Tangani jika data kegiatan tidak ditemukan
             document.getElementById('photoHeaderTitle').textContent = 'Error';
             document.getElementById('photoHeaderSubtitle').textContent = 'Dokumentasi tidak ditemukan.';
-            document.querySelector('.photo-grid').innerHTML = '<div class="photo-placeholder">Gagal memuat data kegiatan.</div>';
+            document.getElementById('photo-viewer').innerHTML = '<div class="photo-placeholder">Gagal memuat data kegiatan.</div>';
             return;
         }
 
@@ -578,98 +585,142 @@ window.addEventListener('load', () => {
         fetchPhotosFromGoogleDrive(activityData.googleDriveFolderId)
             .then(photos => {
                 // Setelah foto didapatkan, lakukan sesuatu dengan mereka
-                activityData.highlightPhotos = photos.slice(0, HIGHLIGHT_PHOTO_COUNT);
-                activityData.carouselPhotos = photos.slice(HIGHLIGHT_PHOTO_COUNT);
+                const highlightPhotos = photos.slice(0, 8); // Ambil 8 foto pertama untuk highlight
 
                 // Perbarui judul dan subjudul halaman
                 document.getElementById('photoHeaderTitle').textContent = activityData.title;
                 document.getElementById('photoHeaderSubtitle').textContent = activityData.subtitle;
 
-                if (photos.length === 0) {
-                    // --- LANGKAH DEBUGGING ---
-                    console.log("Tidak ada foto yang diproses. Array 'photos' kosong.");
-                    // -------------------------
-                    document.querySelector('.photo-grid').innerHTML = '<div class="photo-placeholder" style="grid-column: 1 / -1;">Tidak ada foto di dalam folder ini.</div>';
-                    document.querySelector('.carousel-slides').innerHTML = '<div class="carousel-placeholder">Tidak ada foto lainnya.</div>';
-                    return;
-                }
+                // --- TAHAP 3: Logika untuk Menampilkan Foto Highlight ---
+                const highlightGrid = document.querySelector('.highlight-grid');
+                highlightGrid.innerHTML = ''; // Kosongkan placeholder
 
-                // Isi grid foto
-                const photoGrid = document.querySelector('.photo-grid');
-                photoGrid.innerHTML = ''; // Kosongkan placeholder
-
-                activityData.highlightPhotos.forEach((photo, index) => {
-                    // Buat elemen <a> sebagai pembungkus agar bisa diklik
-                    const link = document.createElement('a');
-                    link.href = photo.url; // URL resolusi penuh untuk tab baru
-                    link.target = '_blank'; // Buka di tab baru
-                    link.rel = 'noopener noreferrer';
-
-                    // Elemen div untuk menampilkan gambar sebagai background
-                    const item = document.createElement('div');
-                    item.className = 'photo-item neobrutalism-box-light';
-                    item.style.boxShadow = `4px 4px 0px ${getShadowColor(index)}`;
-                    item.style.backgroundImage = `url(${photo.url})`;
-
-                    link.appendChild(item); // Masukkan div ke dalam link
-                    photoGrid.appendChild(link); // Masukkan link ke dalam grid
-                });
-
-                // Isi carousel
-                const carouselSlides = document.querySelector('.carousel-slides');
-                const carouselNavPrev = document.querySelector('.carousel-button.prev');
-                const carouselNavNext = document.querySelector('.carousel-button.next');
-                let currentSlideIndex = 0;
-
-                function updateCarousel() {
-                    carouselSlides.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
-                    carouselNavPrev.disabled = currentSlideIndex === 0;
-                    carouselNavNext.disabled = currentSlideIndex === activityData.carouselPhotos.length - 1;
-                }
-
-                if (activityData.carouselPhotos.length > 0) {
-                    carouselSlides.innerHTML = ''; // Kosongkan placeholder
-                    activityData.carouselPhotos.forEach(photo => {
-                        // Buat elemen <a> sebagai pembungkus slide
+                if (highlightPhotos.length > 0) {
+                    highlightPhotos.forEach(photo => {
                         const link = document.createElement('a');
                         link.href = photo.url;
                         link.target = '_blank';
                         link.rel = 'noopener noreferrer';
 
-                        // Buat elemen 'div' untuk slide
-                        const slide = document.createElement('div');
-                        slide.className = 'carousel-slide';
-                        slide.style.backgroundImage = `url(${photo.url})`;
+                        const item = document.createElement('div');
+                        item.className = 'highlight-item';
 
-                        link.appendChild(slide); // Masukkan div slide ke dalam link
-                        carouselSlides.appendChild(link); // Masukkan link yang sudah berisi slide ke dalam container
+                        const img = document.createElement('img');
+                        img.src = photo.url;
+                        img.alt = photo.name;
+                        img.className = 'highlight-img';
+
+                        item.appendChild(img);
+                        link.appendChild(item);
+                        highlightGrid.appendChild(link);
                     });
-
-                    if (activityData.carouselPhotos.length > 1) {
-                        carouselNavNext.disabled = false;
-                    }
-
-                    carouselNavPrev.addEventListener('click', () => {
-                        if (currentSlideIndex > 0) {
-                            currentSlideIndex--;
-                            updateCarousel();
-                        }
-                    });
-
-                    carouselNavNext.addEventListener('click', () => {
-                        if (currentSlideIndex < activityData.carouselPhotos.length - 1) {
-                            currentSlideIndex++;
-                            updateCarousel();
-                        }
-                    });
-
-                    // Inisialisasi posisi carousel
-                    updateCarousel();
-
                 } else {
-                    carouselSlides.innerHTML = '<div class="carousel-placeholder">Tidak ada foto lainnya.</div>';
+                    highlightGrid.innerHTML = '<div class="photo-placeholder" style="grid-column: 1 / -1;">Tidak ada foto highlight.</div>';
+                }
+                // --- Akhir Logika Tahap 3 ---
+
+                const photoViewer = document.getElementById('photo-viewer');
+                const prevButton = document.getElementById('prevButton');
+                const nextButton = document.getElementById('nextButton');
+                const photoCounter = document.getElementById('photoCounter');
+                let currentPhotoIndex = 0;
+
+                if (photos.length === 0) {
+                    photoViewer.innerHTML = '<div class="photo-placeholder">Tidak ada foto di dalam folder ini.</div>';
+                    photoCounter.textContent = '0 / 0';
+                    prevButton.disabled = true;
+                    nextButton.disabled = true;
+                    return;
                 }
 
+                // Fungsi untuk menampilkan foto berdasarkan index
+                function showPhoto(index) {
+                    // Jangan lakukan apa-apa jika index tidak valid atau sedang loading
+                    if (index < 0 || index >= photos.length || photoViewer.classList.contains('is-loading')) {
+                        return;
+                    }
+
+                    photoViewer.classList.add('is-loading');
+                    const photo = photos[index];
+                    currentPhotoIndex = index;
+
+                    // Tampilkan spinner loading
+                    const loadingSpinner = photoViewer.querySelector('.photo-viewer-loading');
+                    if (loadingSpinner) {
+                        loadingSpinner.style.opacity = '1';
+                    }
+
+                    // Dapatkan elemen gambar dan caption yang ada
+                    const img = photoViewer.querySelector('.photo-viewer-img');
+                    const caption = photoViewer.querySelector('.photo-caption');
+
+                    // Buat gambar baru di memory untuk pre-loading
+                    const nextImage = new Image();
+                    nextImage.src = photo.url;
+
+                    // Ketika gambar baru selesai dimuat
+                    nextImage.onload = () => {
+                        // Ganti sumber gambar dan caption
+                        if (img) {
+                            img.src = photo.url;
+                            img.alt = photo.name;
+                        }
+                        if (caption) {
+                            caption.textContent = photo.name;
+                        }
+
+                        // Sembunyikan spinner dan tampilkan gambar baru (fade in)
+                        if (loadingSpinner) loadingSpinner.style.opacity = '0';
+                        photoViewer.classList.remove('is-loading');
+                        updateNav();
+                    };
+                }
+
+                // Fungsi untuk memperbarui tombol dan penghitung
+                function updateNav() {
+                    prevButton.disabled = currentPhotoIndex === 0;
+                    nextButton.disabled = currentPhotoIndex === photos.length - 1;
+                    photoCounter.textContent = `${currentPhotoIndex + 1} / ${photos.length}`;
+                }
+
+                // Event listener untuk tombol
+                prevButton.addEventListener('click', () => {
+                    showPhoto(currentPhotoIndex - 1);
+                });
+
+                nextButton.addEventListener('click', () => {
+                    showPhoto(currentPhotoIndex + 1);
+                });
+
+                // --- Inisialisasi Tampilan Awal ---
+                function initializeViewer() {
+                    photoViewer.innerHTML = ''; // Hapus placeholder "Memuat foto..."
+
+                    // Buat elemen-elemen sekali saja
+                    const link = document.createElement('a');
+                    link.target = '_blank';
+                    link.rel = 'noopener noreferrer';
+
+                    const img = document.createElement('img');
+                    img.className = 'photo-viewer-img';
+                    link.appendChild(img);
+
+                    const captionWrapper = document.createElement('div');
+                    captionWrapper.className = 'photo-caption-wrapper';
+                    const caption = document.createElement('div');
+                    caption.className = 'photo-caption';
+                    captionWrapper.appendChild(caption);
+
+                    const loadingSpinner = document.createElement('div');
+                    loadingSpinner.className = 'photo-viewer-loading';
+
+                    photoViewer.append(link, captionWrapper, loadingSpinner);
+
+                    // Tampilkan foto pertama
+                    showPhoto(0);
+                }
+
+                initializeViewer();
             })
             .catch(error => {
                 console.error("Terjadi kesalahan:", error);
