@@ -33,6 +33,42 @@ const certificateTemplates = {
     'Sertifikat 5': 'https://raw.githubusercontent.com/aprelryu21/gugusempat/main/Sertifikat%20Contoh.pdf'
 };
 
+// --- KONFIGURASI GOOGLE DRIVE API ---
+const GOOGLE_API_KEY = 'AIzaSyBzhqp-kABhODRjAIpoH-SSjpBRKVrZEUs'; // Ganti dengan API Key Anda
+const HIGHLIGHT_PHOTO_COUNT = 10; // Jumlah foto untuk ditampilkan di grid
+
+// Data untuk halaman dokumentasi foto
+const photoDocumentationData = {
+    'kkg_gugus_4': {
+        title: 'Dokumentasi Foto',
+        subtitle: 'KKG Gugus 4 Widya Karya Tanggal 04 November 2025',
+        googleDriveFolderId: '1-3b_Vv2Sg-mYk_x9XzYq_Zz3j_4J5K6L',
+        highlightPhotos: [], // Akan diisi dari Google Drive
+        carouselPhotos: []   // Akan diisi dari Google Drive
+    },
+    'kegiatan_2': {
+        title: 'Dokumentasi Kegiatan 2',
+        subtitle: 'Tanggal Menyusul',
+        googleDriveFolderId: 'Folder',
+        highlightPhotos: [],
+        carouselPhotos: []
+    },
+    'kegiatan_3': {
+        title: 'Dokumentasi Kegiatan 3',
+        subtitle: 'Tanggal Menyusul',
+        googleDriveFolderId: 'Folder',
+        highlightPhotos: [],
+        carouselPhotos: []
+    },
+    'kegiatan_4': {
+        title: 'Dokumentasi Kegiatan 4',
+        subtitle: 'Tanggal Menyusul',
+        googleDriveFolderId: 'Folder',
+        highlightPhotos: [],
+        carouselPhotos: []
+    },
+};
+
 // Initialize SDK
 if (window.elementSdk) {
     window.elementSdk.init({
@@ -124,7 +160,12 @@ function closeDocModal(event) {
 }
 
 function openDocumentation() {
-    window.open(appState.currentDocLink, '_blank', 'noopener,noreferrer');
+    // Cek apakah link adalah halaman internal atau eksternal
+    if (appState.currentDocLink.startsWith('http')) {
+        window.open(appState.currentDocLink, '_blank', 'noopener,noreferrer');
+    } else {
+        window.location.href = appState.currentDocLink;
+    }
     closeDocModal();
 }
 
@@ -469,5 +510,115 @@ window.addEventListener('load', () => {
     if (footer && !document.getElementById('splashScreen')) {
         footer.style.display = 'block';
     }
-});
 
+    // --- FUNGSI-FUNGSI GOOGLE DRIVE ---
+    async function fetchPhotosFromGoogleDrive(folderId) {
+        if (!GOOGLE_API_KEY || GOOGLE_API_KEY === 'MASUKKAN_API_KEY_ANDA_DI_SINI') {
+            console.error("PENTING: Google API Key belum diatur di script.js.");
+            return []; // Kembalikan array kosong jika API Key tidak ada
+        }
+
+        const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+(mimeType='image/jpeg'+or+mimeType='image/png')&key=${GOOGLE_API_KEY}&fields=files(id,name)`;
+
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(`Gagal mengambil data dari Google Drive: ${errorData.error.message}`);
+            }
+            const data = await response.json();
+            // Ubah data mentah menjadi format URL yang bisa ditampilkan
+            return data.files.map(file => ({
+                id: file.id,
+                name: file.name,
+                // URL ini adalah format untuk menampilkan gambar dari Google Drive secara langsung
+                url: `https://lh3.googleusercontent.com/d/${file.id}`
+            }));
+        } catch (error) {
+            console.error("Error saat mengambil data dari Google Drive:", error);
+            // Tampilkan error di UI agar pengguna tahu ada masalah
+            const photoGrid = document.querySelector('.photo-grid');
+            if (photoGrid) {
+                photoGrid.innerHTML = `<div class="photo-placeholder" style="grid-column: 1 / -1;">Gagal memuat foto dari Google Drive. Periksa konsol (F12) untuk detail.</div>`;
+            }
+            return [];
+        }
+    }
+
+    // Fungsi untuk memberikan warna bayangan secara berurutan
+    function getShadowColor(index) {
+        const colors = [
+            '#e67e22', '#27ae60', '#2980b9', '#c0392b', '#8e44ad',
+            '#2c3e50', '#ff6b6b', '#4ecdc4', '#f9ca24', '#a55eea'
+        ];
+        return colors[index % colors.length];
+    }
+
+    // Inisialisasi untuk halaman dokumentasi foto (dokumentasi-foto.html)
+    if (document.querySelector('.photo-grid')) {
+        const params = new URLSearchParams(window.location.search);
+        const activityId = params.get('kegiatan');
+        const activityData = photoDocumentationData[activityId];
+
+        if (!activityData) {
+            // Tangani jika data kegiatan tidak ditemukan
+            document.getElementById('photoHeaderTitle').textContent = 'Error';
+            document.getElementById('photoHeaderSubtitle').textContent = 'Dokumentasi tidak ditemukan.';
+            document.querySelector('.photo-grid').innerHTML = '<div class="photo-placeholder">Gagal memuat data kegiatan.</div>';
+            return;
+        }
+
+        // Ambil daftar foto dari Google Drive
+        fetchPhotosFromGoogleDrive(activityData.googleDriveFolderId)
+            .then(photos => {
+                // Setelah foto didapatkan, lakukan sesuatu dengan mereka
+                activityData.highlightPhotos = photos.slice(0, HIGHLIGHT_PHOTO_COUNT);
+                activityData.carouselPhotos = photos.slice(HIGHLIGHT_PHOTO_COUNT);
+
+                // Perbarui judul dan subjudul halaman
+                document.getElementById('photoHeaderTitle').textContent = activityData.title;
+                document.getElementById('photoHeaderSubtitle').textContent = activityData.subtitle;
+
+                if (photos.length === 0) {
+                    document.querySelector('.photo-grid').innerHTML = '<div class="photo-placeholder" style="grid-column: 1 / -1;">Tidak ada foto di dalam folder ini.</div>';
+                    document.querySelector('.carousel-slides').innerHTML = '<div class="carousel-placeholder">Tidak ada foto lainnya.</div>';
+                    return;
+                }
+
+                // Isi grid foto
+                const photoGrid = document.querySelector('.photo-grid');
+                photoGrid.innerHTML = ''; // Kosongkan placeholder
+                activityData.highlightPhotos.forEach((photo, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'photo-item neobrutalism-box-light';
+                    item.style.boxShadow = `4px 4px 0px ${getShadowColor(index)}`;
+                    item.style.backgroundImage = `url(${photo.url})`;
+                    item.style.backgroundSize = 'cover';
+                    item.style.backgroundPosition = 'center';
+                    photoGrid.appendChild(item);
+                });
+
+                // Isi carousel
+                const carouselSlides = document.querySelector('.carousel-slides');
+                const carouselNavNext = document.querySelector('.carousel-button.next');
+                
+                if (activityData.carouselPhotos.length > 0) {
+                    carouselSlides.innerHTML = ''; // Kosongkan placeholder
+                    activityData.carouselPhotos.forEach(photo => {
+                        const slide = document.createElement('div');
+                        slide.className = 'carousel-slide';
+                        slide.style.backgroundImage = `url(${photo.url})`;
+                        carouselSlides.appendChild(slide);
+                    });
+                    if (activityData.carouselPhotos.length > 1) carouselNavNext.disabled = false;
+                } else {
+                    carouselSlides.innerHTML = '<div class="carousel-placeholder">Tidak ada foto lainnya.</div>';
+                }
+
+            })
+            .catch(error => {
+                console.error("Terjadi kesalahan:", error);
+                // Tangani kesalahan jika pengambilan data gagal
+            });
+    }
+});
