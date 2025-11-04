@@ -635,6 +635,9 @@ window.addEventListener('load', () => {
                         link.href = photo.url;
                         link.target = '_blank';
                         link.rel = 'noopener noreferrer';
+
+                        // INI PERBAIKANNYA: Buat elemen 'div' untuk slide
+                        const slide = document.createElement('div');
                         slide.className = 'carousel-slide';
                         slide.style.backgroundImage = `url(${photo.url})`;
 

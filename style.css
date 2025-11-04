@@ -14,7 +14,7 @@ body {
 }
 
 .container {
-    max-width: 900px; /* Diperbesar agar lebih lega */
+    max-width: 400px; /* Dikembalikan ke ukuran semula */
     margin: 0 auto;
     padding: 20px;
     min-height: 100%;
@@ -875,6 +875,11 @@ body {
     position: relative;
     border: 4px solid #000;
     background: #fff;
+    /* Trik untuk membuat kontainer ini lebih lebar dari induknya */
+    width: calc(100% + 100px);
+    margin-left: -50px;
+    margin-right: -50px;
+    max-width: 900px; /* Batas lebar maksimum */
 }
 
 .carousel-title {
@@ -941,4 +946,13 @@ body {
 .carousel-button:hover:not(:disabled) {
     transform: translate(2px, 2px);
     box-shadow: 2px 2px 0px #000;
+}
+
+/* Penyesuaian untuk layar yang lebih besar dari 400px agar carousel tidak terlalu lebar */
+@media (min-width: 500px) {
+    .carousel-wrapper {
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
 }
