@@ -636,13 +636,12 @@ window.addEventListener('load', () => {
                         link.target = '_blank';
                         link.rel = 'noopener noreferrer';
 
-                        // Buat elemen 'div' untuk slide
-                        const slide = document.createElement('div');
-                        slide.className = 'carousel-slide';
-                        slide.style.backgroundImage = `url(${photo.url})`;
+                        // Atur link sebagai slide itu sendiri
+                        link.className = 'carousel-slide';
+                        link.style.backgroundImage = `url(${photo.url})`;
 
-                        link.appendChild(slide); // Masukkan div slide ke dalam link
-                        carouselSlides.appendChild(link); // Masukkan link yang sudah berisi slide ke dalam container
+                        // Tidak perlu elemen div terpisah, link itu sendiri adalah slidenya
+                        carouselSlides.appendChild(link);
                     });
 
                     if (activityData.carouselPhotos.length > 1) {

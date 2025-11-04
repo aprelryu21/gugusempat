@@ -900,7 +900,7 @@ body {
     background-position: center;
 }
 .carousel-slides {
-    display: flex;
+    display: flex; /* Pastikan ini ada untuk layout flexbox */
     transition: transform 0.5s ease-in-out;
     /* Properti lain dipindahkan ke .carousel-viewer */
 }
