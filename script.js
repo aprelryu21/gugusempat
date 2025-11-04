@@ -636,13 +636,13 @@ window.addEventListener('load', () => {
                         link.target = '_blank';
                         link.rel = 'noopener noreferrer';
 
-                        // INI PERBAIKANNYA: Buat elemen 'div' untuk slide
+                        // Buat elemen 'div' untuk slide
                         const slide = document.createElement('div');
                         slide.className = 'carousel-slide';
                         slide.style.backgroundImage = `url(${photo.url})`;
 
                         link.appendChild(slide); // Masukkan div slide ke dalam link
-                        carouselSlides.appendChild(link); // Masukkan link ke dalam container slides
+                        carouselSlides.appendChild(link); // Masukkan link yang sudah berisi slide ke dalam container
                     });
 
                     if (activityData.carouselPhotos.length > 1) {
