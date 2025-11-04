@@ -518,11 +518,12 @@ window.addEventListener('load', () => {
             return []; // Kembalikan array kosong jika API Key tidak ada
         }
 
-        // Meminta webContentLink yang merupakan link download langsung untuk file yang dapat diakses publik.
-        const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+(mimeType='image/jpeg'+or+mimeType='image/png')&key=${GOOGLE_API_KEY}&fields=files(id,name,webContentLink)`;
+        // Kita hanya butuh ID dan nama file. URL akan kita buat sendiri.
+        const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+(mimeType='image/jpeg'+or+mimeType='image/png')&key=${GOOGLE_API_KEY}&fields=files(id,name)`;
 
         try {
             const response = await fetch(url);
+
             if (!response.ok) {
                 const errorData = await response.json();
                 // Memberikan pesan error yang lebih jelas jika folder tidak ditemukan atau akses ditolak
@@ -536,13 +537,8 @@ window.addEventListener('load', () => {
             return data.files.map(file => ({
                 id: file.id,
                 name: file.name,
-                // Gunakan webContentLink sebagai URL gambar. Ini adalah link download langsung.
-                // Modifikasi webContentLink untuk mencoba mendapatkan link preview
-                url: file.webContentLink.includes('&export=download')
-                    ? file.webContentLink.replace('&export=download', '') // Hapus &export=download jika ada
-                    : file.webContentLink // Gunakan URL asli jika tidak ada
-                // Opsi lain: gunakan thumbnailLink jika webContentLink tidak tersedia
-                // url: file.thumbnailLink || (file.webContentLink.includes('&export=download') ? file.webContentLink.replace('&export=download', '') : file.webContentLink)
+                // SOLUSI: Buat URL yang bisa disematkan langsung menggunakan ID file.
+                url: `https://lh3.googleusercontent.com/d/${file.id}`
             }));
         } catch (error) {
             console.error("Error saat mengambil data dari Google Drive:", error);
