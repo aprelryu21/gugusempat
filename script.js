@@ -537,7 +537,8 @@ window.addEventListener('load', () => {
                 id: file.id,
                 name: file.name,
                 // Gunakan webContentLink sebagai URL gambar. Ini adalah link download langsung.
-                url: file.webContentLink
+                // Modifikasi webContentLink untuk mencoba mendapatkan link preview
+                url: file.webContentLink.replace('&export=download', '') // Hapus &export=download
             }));
         } catch (error) {
             console.error("Error saat mengambil data dari Google Drive:", error);
