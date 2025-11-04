@@ -823,161 +823,120 @@ body {
     border: none;
 }
 
-/* --- TAHAP 1: Gaya Galeri Foto Sederhana --- */
+/* Halaman Dokumentasi Foto - Grid Layout */
+.photo-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 25px;
+}
 
-/* Wadah utama untuk menampilkan foto */
-#photo-viewer {
-    width: 100%;
-    aspect-ratio: 4 / 3; /* Rasio aspek untuk kontainer */
-    background-color: #e0e0e0;
+.photo-item {
+    display: block; /* Mengubah dari flex ke block agar bisa diisi <a> */
+    text-decoration: none;
     border: 4px solid #000;
+    aspect-ratio: 1 / 1; /* Membuat item menjadi persegi */
+    background-size: cover;
+    background-position: center;
+    /* display, align-items, justify-content, padding dihapus karena sekarang dihandle oleh <a> */
+    transition: all 0.1s ease;
+}
+
+.photo-item:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px var(--shadow-color, #000) !important;
+}
+
+/* Placeholder di dalam kotak foto */
+.photo-placeholder {
+    font-size: 10px;
+    color: #333;
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 8px 12px;
+    border: 2px dashed #888;
+}
+
+/* Menyesuaikan bayangan saat hover berdasarkan warna utama */
+.photo-item[style*="#e67e22"]:hover { --shadow-color: #e67e22; }
+.photo-item[style*="#27ae60"]:hover { --shadow-color: #27ae60; }
+.photo-item[style*="#2980b9"]:hover { --shadow-color: #2980b9; }
+.photo-item[style*="#c0392b"]:hover { --shadow-color: #c0392b; }
+.photo-item[style*="#8e44ad"]:hover { --shadow-color: #8e44ad; }
+.photo-item[style*="#2c3e50"]:hover { --shadow-color: #2c3e50; }
+.photo-item[style*="#ff6b6b"]:hover { --shadow-color: #ff6b6b; }
+.photo-item[style*="#4ecdc4"]:hover { --shadow-color: #4ecdc4; }
+.photo-item[style*="#f9ca24"]:hover { --shadow-color: #f9ca24; }
+.photo-item[style*="#a55eea"]:hover { --shadow-color: #a55eea; }
+
+/* Carousel Baru - Lebih Keren & Neobrutalism */
+.carousel-wrapper {
+    padding: 20px;
+    margin-bottom: 25px;
+    position: relative;
+    border: 4px solid #000;
+    background: #fff;
+}
+
+.carousel-viewer {
+    width: 100%;
+    overflow: hidden;
+    border: 3px solid #000;
+    background: #e0e0e0;
+}
+.carousel-title {
+    font-size: 12px;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #000;
+}
+
+.carousel-slide {
+    display: block; /* Agar bisa menjadi link */
+    text-decoration: none;
+    flex-shrink: 0;
+    width: 100%;
+    height: 400px; /* Dibuat lebih tinggi */
+    background-size: cover;
+    background-position: center;
+}
+.carousel-slides {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    /* Properti lain dipindahkan ke .carousel-viewer */
+}
+
+.carousel-placeholder {
+    width: 100%;
+    height: 400px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 25px;
-    overflow: hidden; /* Agar gambar tidak keluar dari kotak */
-    position: relative; /* Untuk placeholder */
-}
-
-/* --- TAHAP 2: Penyempurnaan Galeri --- */
-
-/* Transisi untuk gambar */
-#photo-viewer .photo-viewer-img {
-    transition: opacity 0.3s ease-in-out;
-    opacity: 1;
-}
-
-/* Saat memuat gambar baru, buat gambar lama transparan */
-#photo-viewer.is-loading .photo-viewer-img {
-    opacity: 0;
-}
-
-/* Wadah untuk caption */
-.photo-caption-wrapper {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(0, 0, 0, 0.6);
-    padding: 8px 12px;
-    transition: opacity 0.3s ease-in-out;
-}
-
-/* Teks caption */
-.photo-caption {
-    color: white;
-    font-size: 8px;
+    font-size: 10px;
+    color: #666;
     text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    padding: 10px;
 }
 
-/* Sembunyikan caption saat loading */
-#photo-viewer.is-loading .photo-caption-wrapper {
-    opacity: 0;
-}
-
-/* Gambar di dalam wadah */
-.photo-viewer-img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain; /* 'contain' agar seluruh gambar terlihat tanpa terpotong */
-    text-decoration: none;
-    /* Tambahkan transisi opacity */
-    transition: opacity 0.3s ease-in-out;
-}
-
-/* Navigasi di bawah foto */
-.photo-navigation {
+.carousel-nav {
+    margin-top: 20px;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
+    justify-content: center;
+    gap: 15px;
 }
 
-.photo-navigation .nav-button {
+.carousel-button {
     background: #fff;
     color: #000;
     border: 3px solid #000;
     font-family: 'Press Start 2P', monospace;
-    font-size: 10px;
+    font-size: 14px;
     cursor: pointer;
-    padding: 10px 15px;
+    padding: 10px 20px;
     box-shadow: 4px 4px 0px #000;
     transition: all 0.1s ease;
 }
 
-.photo-navigation .nav-button:hover:not(:disabled) {
+.carousel-button:hover:not(:disabled) {
     transform: translate(2px, 2px);
     box-shadow: 2px 2px 0px #000;
-}
-
-/* Teks penghitung foto (misal: 1 / 20) */
-.photo-counter {
-    font-size: 10px;
-    color: #666;
-    font-weight: bold;
-}
-
-/* Placeholder saat foto sedang dimuat */
-.photo-placeholder {
-    font-size: 10px;
-    color: #333;
-}
-
-/* Indikator loading di tengah viewer */
-.photo-viewer-loading {
-    position: absolute;
-    width: 30px;
-    height: 30px;
-    border: 3px solid rgba(0, 0, 0, 0.5);
-    border-top-color: #fff;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    /* Awalnya disembunyikan */
-    opacity: 0;
-    transition: opacity 0.2s ease;
-}
-
-/* --- TAHAP 3: Gaya untuk Foto Highlight --- */
-
-/* Grid untuk foto highlight */
-.highlight-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2 kolom */
-    gap: 15px;
-    margin-bottom: 25px;
-}
-
-/* Wadah untuk setiap foto highlight */
-.highlight-item {
-    aspect-ratio: 1 / 1; /* Membuatnya menjadi kotak */
-    border: 3px solid #000;
-    background-color: #f0f0f0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    position: relative;
-    box-shadow: 4px 4px 0px #888;
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-}
-
-.highlight-item:hover {
-    transform: translate(3px, 3px);
-    box-shadow: 1px 1px 0px #888;
-}
-
-.highlight-item a {
-    display: block;
-    width: 100%;
-    height: 100%;
-}
-
-/* Gambar di dalam highlight-item */
-.highlight-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* Memenuhi wadah tanpa merusak rasio gambar */
 }
