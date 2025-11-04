@@ -529,6 +529,9 @@ window.addEventListener('load', () => {
                 throw new Error(`Gagal mengambil data dari Google Drive: ${errorData.error.message}. Pastikan folder ID benar dan folder telah dibagikan untuk 'Siapa saja yang memiliki link'.`);
             }
             const data = await response.json();
+            // --- LANGKAH DEBUGGING ---
+            console.log("Respons mentah dari Google Drive API:", data);
+            // -------------------------
             // Ubah data mentah menjadi format URL yang bisa ditampilkan
             return data.files.map(file => ({
                 id: file.id,
@@ -582,6 +585,9 @@ window.addEventListener('load', () => {
                 document.getElementById('photoHeaderSubtitle').textContent = activityData.subtitle;
 
                 if (photos.length === 0) {
+                    // --- LANGKAH DEBUGGING ---
+                    console.log("Tidak ada foto yang diproses. Array 'photos' kosong.");
+                    // -------------------------
                     document.querySelector('.photo-grid').innerHTML = '<div class="photo-placeholder" style="grid-column: 1 / -1;">Tidak ada foto di dalam folder ini.</div>';
                     document.querySelector('.carousel-slides').innerHTML = '<div class="carousel-placeholder">Tidak ada foto lainnya.</div>';
                     return;
