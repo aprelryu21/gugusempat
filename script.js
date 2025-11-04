@@ -538,7 +538,11 @@ window.addEventListener('load', () => {
                 name: file.name,
                 // Gunakan webContentLink sebagai URL gambar. Ini adalah link download langsung.
                 // Modifikasi webContentLink untuk mencoba mendapatkan link preview
-                url: file.webContentLink.replace('&export=download', '') // Hapus &export=download
+                url: file.webContentLink.includes('&export=download')
+                    ? file.webContentLink.replace('&export=download', '') // Hapus &export=download jika ada
+                    : file.webContentLink // Gunakan URL asli jika tidak ada
+                // Opsi lain: gunakan thumbnailLink jika webContentLink tidak tersedia
+                // url: file.thumbnailLink || (file.webContentLink.includes('&export=download') ? file.webContentLink.replace('&export=download', '') : file.webContentLink)
             }));
         } catch (error) {
             console.error("Error saat mengambil data dari Google Drive:", error);
