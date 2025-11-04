@@ -597,29 +597,72 @@ window.addEventListener('load', () => {
                 // Isi grid foto
                 const photoGrid = document.querySelector('.photo-grid');
                 photoGrid.innerHTML = ''; // Kosongkan placeholder
+
                 activityData.highlightPhotos.forEach((photo, index) => {
+                    // Buat elemen <a> sebagai pembungkus agar bisa diklik
+                    const link = document.createElement('a');
+                    link.href = photo.url; // URL resolusi penuh untuk tab baru
+                    link.target = '_blank'; // Buka di tab baru
+                    link.rel = 'noopener noreferrer';
+
+                    // Elemen div untuk menampilkan gambar sebagai background
                     const item = document.createElement('div');
                     item.className = 'photo-item neobrutalism-box-light';
                     item.style.boxShadow = `4px 4px 0px ${getShadowColor(index)}`;
                     item.style.backgroundImage = `url(${photo.url})`;
-                    item.style.backgroundSize = 'cover';
-                    item.style.backgroundPosition = 'center';
-                    photoGrid.appendChild(item);
+
+                    link.appendChild(item); // Masukkan div ke dalam link
+                    photoGrid.appendChild(link); // Masukkan link ke dalam grid
                 });
 
                 // Isi carousel
                 const carouselSlides = document.querySelector('.carousel-slides');
+                const carouselNavPrev = document.querySelector('.carousel-button.prev');
                 const carouselNavNext = document.querySelector('.carousel-button.next');
-                
+                let currentSlideIndex = 0;
+
+                function updateCarousel() {
+                    carouselSlides.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
+                    carouselNavPrev.disabled = currentSlideIndex === 0;
+                    carouselNavNext.disabled = currentSlideIndex === activityData.carouselPhotos.length - 1;
+                }
+
                 if (activityData.carouselPhotos.length > 0) {
                     carouselSlides.innerHTML = ''; // Kosongkan placeholder
                     activityData.carouselPhotos.forEach(photo => {
-                        const slide = document.createElement('div');
+                        // Buat elemen <a> sebagai pembungkus slide
+                        const link = document.createElement('a');
+                        link.href = photo.url;
+                        link.target = '_blank';
+                        link.rel = 'noopener noreferrer';
                         slide.className = 'carousel-slide';
                         slide.style.backgroundImage = `url(${photo.url})`;
-                        carouselSlides.appendChild(slide);
+
+                        link.appendChild(slide); // Masukkan div slide ke dalam link
+                        carouselSlides.appendChild(link); // Masukkan link ke dalam container slides
                     });
-                    if (activityData.carouselPhotos.length > 1) carouselNavNext.disabled = false;
+
+                    if (activityData.carouselPhotos.length > 1) {
+                        carouselNavNext.disabled = false;
+                    }
+
+                    carouselNavPrev.addEventListener('click', () => {
+                        if (currentSlideIndex > 0) {
+                            currentSlideIndex--;
+                            updateCarousel();
+                        }
+                    });
+
+                    carouselNavNext.addEventListener('click', () => {
+                        if (currentSlideIndex < activityData.carouselPhotos.length - 1) {
+                            currentSlideIndex++;
+                            updateCarousel();
+                        }
+                    });
+
+                    // Inisialisasi posisi carousel
+                    updateCarousel();
+
                 } else {
                     carouselSlides.innerHTML = '<div class="carousel-placeholder">Tidak ada foto lainnya.</div>';
                 }
