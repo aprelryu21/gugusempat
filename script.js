@@ -34,6 +34,7 @@ const certificateTemplates = {
 };
 
 // --- KONFIGURASI GOOGLE DRIVE API ---
+const GOOGLE_API_KEY = 'AIzaSyBzhqp-kABhODRjAIpoH-SSjpBRKVrZEUs'; // Ganti dengan API Key Anda
 const HIGHLIGHT_PHOTO_COUNT = 10; // Jumlah foto untuk ditampilkan di grid
 
 // Data untuk halaman dokumentasi foto
@@ -512,18 +513,22 @@ window.addEventListener('load', () => {
 
     // --- FUNGSI-FUNGSI GOOGLE DRIVE ---
     async function fetchPhotosFromGoogleDrive(folderId) {
-        // URL sekarang menunjuk ke serverless function kita, bukan langsung ke Google
-        const url = `/api/google-drive?folderId=${folderId}`;
+        if (!GOOGLE_API_KEY || GOOGLE_API_KEY === 'MASUKKAN_API_KEY_ANDA_DI_SINI') {
+            console.error("PENTING: Google API Key belum diatur di script.js.");
+            return []; // Kembalikan array kosong jika API Key tidak ada
+        }
+
+        // Kita hanya butuh ID dan nama file. URL akan kita buat sendiri.
+        const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+(mimeType='image/jpeg'+or+mimeType='image/png')&key=${GOOGLE_API_KEY}&fields=files(id,name)`;
 
         try {
             const response = await fetch(url);
 
             if (!response.ok) {
                 const errorData = await response.json();
-                // Pesan error sekarang datang dari serverless function kita
-                throw new Error(errorData.error || 'Gagal mengambil data dari server.');
+                // Memberikan pesan error yang lebih jelas jika folder tidak ditemukan atau akses ditolak
+                throw new Error(`Gagal mengambil data dari Google Drive: ${errorData.error.message}. Pastikan folder ID benar dan folder telah dibagikan untuk 'Siapa saja yang memiliki link'.`);
             }
-
             const data = await response.json();
             // --- LANGKAH DEBUGGING ---
             console.log("Respons mentah dari Google Drive API:", data);
@@ -671,3 +676,4 @@ window.addEventListener('load', () => {
             });
     }
 });
+
