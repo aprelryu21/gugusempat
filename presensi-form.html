@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="id">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Presensi - GUGUS 4 WIDYA KARYA</title>
+  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/aprelryu21/gugusempat/main/favicon.png">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
+  <link rel="stylesheet" href="style.css">
+  <style>@view-transition { navigation: auto; }</style>
+ </head>
+ <body>
+  <main>
+   <div class="page-content" style="display: block;">
+    <div class="container">
+     <div class="form-header neobrutalism-box">
+      <h1 id="attendanceFormTitle">Memuat Form Presensi...</h1>
+      <h2 id="attendanceFormDate"></h2>
+     </div>
+
+     <div class="form-container neobrutalism-box-light" style="box-shadow: 6px 6px 0px #27ae60;">
+      <form id="attendanceFormElement" onsubmit="submitAttendance(event)">
+       <div class="form-group">
+        <label class="form-label" for="attendanceName">Nama Peserta</label>
+        <input type="text" id="attendanceName" class="form-input" placeholder="Contoh: Apriliyanto Ratih Sukarno, S.Pd" required>
+       </div>
+       <div class="form-group">
+        <label class="form-label" for="attendanceNip">NIP</label>
+        <input type="text" id="attendanceNip" class="form-input" placeholder="Jika Non ASN, Isikan '-'" required>
+       </div>
+       <div class="form-group">
+        <label class="form-label" for="attendancePangkat">Pangkat Golongan</label>
+        <input type="text" id="attendancePangkat" class="form-input" placeholder="Jika Non ASN, Isikan '-'" required>
+       </div>
+       <div class="form-group">
+        <label class="form-label" for="attendanceSchool">Asal Sekolah</label>
+        <input type="text" id="attendanceSchool" class="form-input" placeholder="Contoh: SD Negeri Medowo 1" required>
+       </div>
+       <div class="form-group">
+        <label class="form-label">Jenis Kelamin</label>
+        <div class="radio-group">
+         <label class="radio-label"><input type="radio" name="gender" value="Pria" required> Pria</label>
+         <label class="radio-label"><input type="radio" name="gender" value="Wanita"> Wanita</label>
+        </div>
+       </div>
+       <div class="form-group">
+        <label class="form-label" for="attendanceAgama">Agama</label>
+        <input type="text" id="attendanceAgama" class="form-input" placeholder="Contoh: Islam" required>
+       </div>
+       <div class="form-group">
+        <label class="form-label" for="attendanceAlamat">Alamat</label>
+        <textarea id="attendanceAlamat" class="form-input" rows="3" placeholder="Contoh: Dsn. Medowo RT 01 RW 01, Ds. Medowo, Kec. Kandangan" required></textarea>
+       </div>
+       <button type="submit" id="submitAttendanceBtn" class="neobrutalism-button btn-create" style="width: 100%; margin-bottom: 15px;">
+        <span class="button-text">Kirim Presensi</span>
+        <span class="button-loader" style="display: none;">Mengirim...</span>
+       </button>
+      </form>
+      <div class="button-row">
+       <a href="presensi.html" class="neobrutalism-button btn-back"> Kembali </a>
+      </div>
+     </div>
+    </div>
+   </div>
+
+   <!-- Modal Loading Presensi -->
+   <div id="loadingModalOverlay" class="modal-overlay">
+    <div class="modal" style="max-width: 300px;">
+     <div class="loading-container">
+      <div class="loading-spinner"></div>
+      <div class="loading-text">Mengirim Data Presensi...<br>Mohon Tunggu Sebentar</div>
+     </div>
+    </div>
+   </div>
+
+   <!-- Modal Sukses Presensi -->
+   <div id="successModalOverlay" class="modal-overlay" onclick="closeSuccessModal(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+     <button class="modal-close" onclick="closeSuccessModal()">×</button>
+     <div id="successModalTitle" class="modal-title" style="text-align: center; color: #27ae60;"></div>
+     <div class="confirm-buttons">
+      <button class="neobrutalism-button" onclick="closeSuccessModalAndRedirect()">OK</button>
+     </div>
+    </div>
+   </div>
+
+  </main>
+  <div class="fixed-bottom-footer">
+   <a href="index.html" class="home-button">Beranda</a>
+  </div>
+  <script src="script.js"></script>
+ </body>
+</html>

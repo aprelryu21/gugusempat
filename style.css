@@ -156,8 +156,10 @@ body {
     transition: all 0.1s ease;
     text-align: center;
     text-decoration: none;
-    display: inline-block;
+    display: block;
     font-weight: bold;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .splash-button:hover {
@@ -487,6 +489,29 @@ body {
     transform: translate(2px, 2px);
 }
 
+.form-input[type="text"],
+.form-input[type="email"],
+.form-input[type="password"],
+textarea.form-input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    resize: vertical;
+}
+
+.radio-group {
+    display: flex;
+    gap: 20px;
+    margin-top: 5px;
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    font-size: 9px;
+    cursor: pointer;
+}
+
 .input-loading {
     font-style: italic;
     color: #888;
@@ -530,6 +555,11 @@ body {
 
 .btn-reset:hover {
     box-shadow: 2px 2px 0px #2980b9;
+}
+
+.button-loader {
+    font-style: italic;
+    display: none; /* Sembunyikan secara default */
 }
 
 /* Modal */
@@ -939,4 +969,99 @@ body {
 .carousel-button:hover:not(:disabled) {
     transform: translate(2px, 2px);
     box-shadow: 2px 2px 0px #000;
+}
+
+/* New Fixed Bottom Footer */
+.fixed-bottom-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+    border-top: 4px solid #000; /* Hanya border atas */
+    box-shadow: 0px -8px 0px #000; /* Shadow hanya di atas */
+    padding: 15px 20px;
+    z-index: 100;
+    display: flex;
+    justify-content: center; /* Pusatkan tombol */
+    align-items: center;
+}
+
+.fixed-bottom-footer .home-button {
+    flex: 0 1 auto; /* Izinkan menyusut/membesar tetapi prioritaskan ukuran konten */
+    max-width: 200px; /* Batasi lebar untuk layar lebih besar */
+    background: linear-gradient(135deg, #f9ca24 0%, #f0b90b 100%); /* Mirip dengan nav-home */
+    border: 3px solid #000;
+    box-shadow: 4px 4px 0px #d4a017;
+    color: #000;
+    padding: 12px 25px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    text-align: center;
+    text-decoration: none;
+    display: block; /* Agar mengambil lebar penuh dalam flex item */
+    font-weight: bold;
+}
+
+.fixed-bottom-footer .home-button:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px #d4a017;
+}
+
+.fixed-bottom-footer .home-button:active {
+    transform: translate(4px, 4px);
+    box-shadow: 0px 0px 0px #d4a017;
+}
+
+/* Halaman Unduh Sertifikat - Daftar File */
+.search-container {
+    margin-bottom: 25px;
+}
+
+.search-container .form-input {
+    box-shadow: 4px 4px 0px #8e44ad;
+}
+
+.search-container .form-input:focus {
+    box-shadow: 2px 2px 0px #8e44ad;
+    transform: translate(2px, 2px);
+}
+
+.download-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.download-item {
+    display: block;
+    text-decoration: none;
+    padding: 15px;
+    border: 3px solid #000;
+    background: #fff;
+    transition: all 0.1s ease;
+}
+
+.download-item:hover {
+    transform: translate(2px, 2px);
+}
+
+.download-item-title {
+    font-size: 8px;
+    color: #333;
+    line-height: 1.4;
+    word-break: break-all; /* Memastikan nama file panjang tidak merusak layout */
+}
+
+.download-placeholder {
+    grid-column: 1 / -1; /* Agar placeholder mengambil 2 kolom */
+    font-size: 9px;
+    color: #666;
+    text-align: center;
+    padding: 20px;
+    border: 3px dashed #ccc;
+    background: #f9f9f9;
 }

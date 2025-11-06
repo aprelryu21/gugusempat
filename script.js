@@ -26,11 +26,26 @@ const certificateDescriptions = {
 
 // Template URLs for each certificate
 const certificateTemplates = {
-    'Pembelajaran Mendalam': 'https://raw.githubusercontent.com/aprelryu21/gugusempat/main/sertifikat-pm.pdf',
-    'Digitalisasi Pembelajaran': 'https://raw.githubusercontent.com/aprelryu21/gugusempat/main/Sertifikat%20Contoh.pdf', // Ganti dengan URL yang sesuai
-    'Sertifikat 3': 'https://raw.githubusercontent.com/aprelryu21/gugusempat/main/Sertifikat%20Contoh.pdf',
-    'Sertifikat 4': 'https://raw.githubusercontent.com/aprelryu21/gugusempat/main/Sertifikat%20Contoh.pdf',
-    'Sertifikat 5': 'https://raw.githubusercontent.com/aprelryu21/gugusempat/main/Sertifikat%20Contoh.pdf'
+    'Pembelajaran Mendalam': {
+        id: 'pm',
+        url: 'https://raw.githubusercontent.com/aprelryu21/gugusempat/main/sertifikat%20pm.pdf'
+    },
+    'Digitalisasi Pembelajaran': {
+        id: 'digitalisasi',
+        url: 'https://raw.githubusercontent.com/aprelryu21/gugusempat/main/sertifikat%20digitalisasi.pdf'
+    },
+    'Sertifikat 3': {
+        id: 'sertifikat3',
+        url: 'https://raw.githubusercontent.com/aprelryu21/gugusempat/main/Sertifikat%20Contoh.pdf'
+    },
+    'Sertifikat 4': {
+        id: 'sertifikat4',
+        url: 'https://raw.githubusercontent.com/aprelryu21/gugusempat/main/Sertifikat%20Contoh.pdf'
+    },
+    'Sertifikat 5': {
+        id: 'sertifikat5',
+        url: 'https://raw.githubusercontent.com/aprelryu21/gugusempat/main/Sertifikat%20Contoh.pdf'
+    }
 };
 
 // --- KONFIGURASI GOOGLE DRIVE API ---
@@ -68,6 +83,53 @@ const photoDocumentationData = {
         carouselPhotos: []
     },
 };
+
+// Data untuk halaman unduh sertifikat
+const certificateDownloadData = {
+    'pm': {
+        title: 'Unduhan Sertifikat',
+        subtitle: 'Pembelajaran Mendalam',
+        googleDriveFolderId: '1999rSXMiDKe9eQ7YMwhB5eIEWIOMvwBc'
+    },
+    'digitalisasi': {
+        title: 'Unduhan Sertifikat',
+        subtitle: 'Digitalisasi Pembelajaran',
+        googleDriveFolderId: '1PVqL2Ij-Ord0WnWZNJJmCupUYS5yySTf'
+    },
+    'sertifikat3': { title: 'Unduhan Sertifikat', subtitle: 'Sertifikat 3', googleDriveFolderId: '' },
+    'sertifikat4': { title: 'Unduhan Sertifikat', subtitle: 'Sertifikat 4', googleDriveFolderId: '' },
+    'sertifikat5': { title: 'Unduhan Sertifikat', subtitle: 'Sertifikat 5', googleDriveFolderId: '' },
+};
+
+// Data untuk halaman presensi
+const attendanceData = {
+    'diseminasi_pm': {
+        title: 'Diseminasi Pembelajaran Mendalam',
+        date: '04 November 2025'
+    },
+    'kegiatan2': {
+        title: 'Diseminasi Digitalisasi Pembelajaran',
+        date: 'Menyusul'
+    },
+    // Tambahkan kegiatan lain di sini
+    'kegiatan4': {
+        title: 'Kegiatan 4',
+        date: 'Menyusul'
+    },
+    'kegiatan5': {
+        title: 'Kegiatan 5',
+        date: 'Menyusul'
+    }
+};
+
+// Variabel global untuk menyimpan daftar file asli
+const ATTENDANCE_CONFIG = {
+  'diseminasi_pm': { sheetName: 'Presensi Diseminasi PM', numberSheetName: 'nomor_presensi_pm' },
+  'kegiatan2': { sheetName: 'Presensi Diseminasi Digitalisasi', numberSheetName: 'nomor_presensi_dd' },
+  'kegiatan4': { sheetName: 'Presensi Kegiatan 4', numberSheetName: 'nomor_presensi_k4' },
+  'kegiatan5': { sheetName: 'Presensi Kegiatan 5', numberSheetName: 'nomor_presensi_k5' }
+};
+let allFiles = [];
 
 // Initialize SDK
 if (window.elementSdk) {
@@ -141,6 +203,18 @@ function navigateToCertificateForm(certificateName, date) {
     window.location.href = `buat-sertifikat.html?${params.toString()}`;
 }
 
+function navigateToDownloadList(certificateId) {
+    const params = new URLSearchParams();
+    params.append('sertifikat', certificateId);
+    window.location.href = `unduh-daftar.html?${params.toString()}`;
+}
+
+function navigateToAttendanceForm(activityId) {
+    const params = new URLSearchParams();
+    params.append('kegiatan', activityId);
+    window.location.href = `presensi-form.html?${params.toString()}`;
+}
+
 function showDocModal(activityName, date, link, materiLink) {
     appState.currentDocActivity = activityName;
     appState.currentDocDate = date;
@@ -198,14 +272,37 @@ function retryNumberGeneration() {
     resetForm();
 }
 
+function showSuccessModal(message) {
+    document.getElementById('successModalTitle').textContent = message;
+    document.getElementById('successModalOverlay').style.display = 'flex';
+}
+
+function closeSuccessModal(event) {
+    const overlay = document.getElementById('successModalOverlay');
+    if (!event || event.target === overlay) {
+        overlay.style.display = 'none';
+    }
+}
+
+function closeSuccessModalAndRedirect() {
+    closeSuccessModal();
+    // Arahkan kembali ke halaman daftar presensi
+    window.location.href = 'presensi.html';
+}
+
 // --- CERTIFICATE FORM ---
 
 async function generateUniqueCertificateNumber() {
-    // KODE GOOGLE APP SCRIPT 
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzU2s6bI7gKcwv7G7tHz4VmfEl_AgXRov4Hq1NC1kRBt_3tWwR3X5xRGSWq3ORHeF0/exec";
+    // PASTIKAN ANDA MENGGANTI URL INI DENGAN URL WEB APP BARU ANDA
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzk7fI1ju3NzL-c73umJt4f9u7_71vNXP27YngoiweZd_UJuMcJy-ahkPbl4RV1hAUc/exec"; // Ganti dengan URL baru Anda
+
+    // Dapatkan ID sertifikat dari state
+    const certConfig = certificateTemplates[appState.currentCertificate];
+    if (!certConfig) return "Error: Tipe sertifikat tidak dikenal";
 
     try {
-        const response = await fetch(SCRIPT_URL);
+        // Tambahkan parameter 'type' ke URL
+        const response = await fetch(`${SCRIPT_URL}?type=${certConfig.id}`);
         if (!response.ok) {
             throw new Error('Respons jaringan tidak baik.');
         }
@@ -252,7 +349,7 @@ function checkFormCompleteness() {
     const createButton = document.querySelector('.btn-create');
 
     // Kondisi untuk mengaktifkan tombol
-    const isNumberValid = certNumber && !certNumber.includes("Tunggu") && !certNumber.includes("Error");
+    const isNumberValid = certNumber && !certNumber.includes("Tunggu") && !certNumber.includes("Error") && !certNumber.includes("Klik \"Buat Ulang\"");
     const isFormFilled = participantName.trim() !== '' && schoolOrigin.trim() !== '';
 
     createButton.disabled = !(isNumberValid && isFormFilled);
@@ -271,16 +368,21 @@ function createCertificate(event) {
 }
 
 async function saveParticipantData(data) {
-    // URL ini sama dengan yang digunakan untuk generate nomor
-    // PASTIKAN URL INI SAMA DENGAN URL DI FUNGSI generateUniqueCertificateNumber
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzU2s6bI7gKcwv7G7tHz4VmfEl_AgXRov4Hq1NC1kRBt_3tWwR3X5xRGSWq3ORHeF0/exec";
+    // URL ini HARUS SAMA dengan yang digunakan untuk generate nomor
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzk7fI1ju3NzL-c73umJt4f9u7_71vNXP27YngoiweZd_UJuMcJy-ahkPbl4RV1hAUc/exec"; // URL yang sudah diperbaiki
+
+    // Tambahkan tipe sertifikat ke data yang akan dikirim
+    const certConfig = certificateTemplates[appState.currentCertificate];
+    data.certificateType = certConfig.id;
 
     try {
+        // Menambahkan 'requestType' untuk membedakan permintaan di backend
+        data.requestType = 'certificate';
         const response = await fetch(SCRIPT_URL, {
             method: 'POST',
             mode: 'no-cors', // Penting untuk menghindari error CORS pada POST sederhana
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'text/plain;charset=utf-8', // Diubah untuk mode no-cors
             },
             body: JSON.stringify(data)
         });
@@ -289,6 +391,55 @@ async function saveParticipantData(data) {
     } catch (error) {
         console.error("Gagal mengirim data peserta:", error);
         // Gagal menyimpan data tidak akan menghentikan proses download sertifikat
+    }
+}
+
+// --- ATTENDANCE FORM ---
+async function submitAttendance(event) {
+    event.preventDefault();
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzk7fI1ju3NzL-c73umJt4f9u7_71vNXP27YngoiweZd_UJuMcJy-ahkPbl4RV1hAUc/exec"; // URL yang sama
+    const submitBtn = document.getElementById('submitAttendanceBtn');
+    const loadingModal = document.getElementById('loadingModalOverlay');
+
+    // Nonaktifkan tombol dan tampilkan modal loading
+    submitBtn.disabled = true;
+    loadingModal.style.display = 'flex';
+
+
+    const params = new URLSearchParams(window.location.search);
+    const activityId = params.get('kegiatan');
+
+    const attendancePayload = {
+        requestType: 'attendance', // Tipe permintaan baru
+        activityId: activityId,
+        nama: document.getElementById('attendanceName').value,
+        nip: document.getElementById('attendanceNip').value,
+        pangkat: document.getElementById('attendancePangkat').value,
+        sekolah: document.getElementById('attendanceSchool').value,
+        gender: document.querySelector('input[name="gender"]:checked').value,
+        agama: document.getElementById('attendanceAgama').value,
+        alamat: document.getElementById('attendanceAlamat').value,
+    };
+
+    try {
+        const response = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(attendancePayload)
+        });
+        
+        // Sembunyikan modal loading sebelum menampilkan pesan sukses
+        loadingModal.style.display = 'none';
+        // Tampilkan pesan sukses karena dengan 'no-cors' kita tidak bisa membaca respons
+        showSuccessModal(`Terima kasih, ${attendancePayload.nama}! Presensi Anda telah berhasil dikirim.`);
+
+    } catch (error) {
+        console.error("Gagal mengirim data presensi:", error);
+        // Jika terjadi error, sembunyikan modal dan aktifkan kembali tombol
+        loadingModal.style.display = 'none';
+        submitBtn.disabled = false;
+        alert("Gagal mengirim presensi. Silakan periksa koneksi internet Anda dan coba lagi.");
     }
 }
 
@@ -352,7 +503,7 @@ async function createCertificatePDF() {
     const certificateNumber = document.getElementById('certificateNumber').value;
 
     // 1. Fetch PDF template
-    const templateUrl = certificateTemplates[appState.currentCertificate] || certificateTemplates['Sertifikat 3'];
+    const templateUrl = certificateTemplates[appState.currentCertificate].url;
     const response = await fetch(templateUrl);
     if (!response.ok) throw new Error('Gagal mengunduh template sertifikat');
     const existingPdfBytes = await response.arrayBuffer();
@@ -427,7 +578,9 @@ async function createCertificatePDF() {
     saveParticipantData({
         certificateNumber: certificateNumber,
         participantName: participantName,
-        schoolOrigin: schoolOrigin
+        schoolOrigin: schoolOrigin,
+        // Menambahkan nama sertifikat ke data yang akan dikirim
+        certificateName: appState.currentCertificate
     });
 
     const a = document.createElement('a');
@@ -443,7 +596,14 @@ async function createCertificatePDF() {
         closeConfirmModal();
         resetOriginalConfirmModal();
         showSuccessMessage(participantName);
-        resetForm();
+
+        // Setelah sertifikat dibuat, kosongkan form dan tampilkan pesan
+        document.getElementById('participantName').value = '';
+        document.getElementById('schoolOrigin').value = '';
+        document.getElementById('certificateNumber').value = 'Klik "Buat Ulang" untuk generate nomor sertifikat baru.';
+        document.querySelector('.btn-create').disabled = true; // Pastikan tombol buat sertifikat dinonaktifkan
+        // Tidak perlu memanggil resetForm() lagi secara otomatis
+
     }, 1000);
 }
 
@@ -505,6 +665,20 @@ window.addEventListener('load', () => {
         resetForm();
     }
 
+    // Inisialisasi untuk halaman form presensi (presensi-form.html)
+    if (document.getElementById('attendanceFormElement')) {
+        const params = new URLSearchParams(window.location.search);
+        const activityId = params.get('kegiatan');
+        const data = attendanceData[activityId];
+
+        if (data) {
+            document.getElementById('attendanceFormTitle').textContent = data.title;
+            document.getElementById('attendanceFormDate').textContent = `Tanggal: ${data.date}`;
+        } else {
+            document.getElementById('attendanceFormTitle').textContent = 'Kegiatan Tidak Ditemukan';
+        }
+    }
+
     // Inisialisasi umum untuk menampilkan footer di halaman selain splash screen
     const footer = document.getElementById('fixedFooter');
     if (footer && !document.getElementById('splashScreen')) {
@@ -512,14 +686,14 @@ window.addEventListener('load', () => {
     }
 
     // --- FUNGSI-FUNGSI GOOGLE DRIVE ---
-    async function fetchPhotosFromGoogleDrive(folderId) {
+    async function fetchFilesFromGoogleDrive(folderId, mimeTypeQuery = "(mimeType='image/jpeg'+or+mimeType='image/png')") {
         if (!GOOGLE_API_KEY || GOOGLE_API_KEY === 'MASUKKAN_API_KEY_ANDA_DI_SINI') {
             console.error("PENTING: Google API Key belum diatur di script.js.");
             return []; // Kembalikan array kosong jika API Key tidak ada
         }
 
         // Kita hanya butuh ID dan nama file. URL akan kita buat sendiri.
-        const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+(mimeType='image/jpeg'+or+mimeType='image/png')&key=${GOOGLE_API_KEY}&fields=files(id,name)`;
+        const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+${mimeTypeQuery}&key=${GOOGLE_API_KEY}&fields=files(id,name,webViewLink)`;
 
         try {
             const response = await fetch(url);
@@ -537,8 +711,9 @@ window.addEventListener('load', () => {
             return data.files.map(file => ({
                 id: file.id,
                 name: file.name,
-                // SOLUSI: Buat URL yang bisa disematkan langsung menggunakan ID file.
-                url: `https://lh3.googleusercontent.com/d/${file.id}`
+                // Gunakan URL gambar jika ada, atau link web view untuk file lain
+                imageUrl: mimeTypeQuery.includes('image') ? `https://lh3.googleusercontent.com/d/${file.id}` : null,
+                downloadUrl: file.webViewLink // Link untuk membuka file di Google Drive
             }));
         } catch (error) {
             console.error("Error saat mengambil data dari Google Drive:", error);
@@ -575,7 +750,7 @@ window.addEventListener('load', () => {
         }
 
         // Ambil daftar foto dari Google Drive
-        fetchPhotosFromGoogleDrive(activityData.googleDriveFolderId)
+        fetchFilesFromGoogleDrive(activityData.googleDriveFolderId, "(mimeType='image/jpeg'+or+mimeType='image/png')")
             .then(photos => {
                 // Setelah foto didapatkan, lakukan sesuatu dengan mereka
                 activityData.highlightPhotos = photos.slice(0, HIGHLIGHT_PHOTO_COUNT);
@@ -601,7 +776,7 @@ window.addEventListener('load', () => {
                 activityData.highlightPhotos.forEach((photo, index) => {
                     // Buat elemen <a> sebagai pembungkus agar bisa diklik
                     const link = document.createElement('a');
-                    link.href = photo.url; // URL resolusi penuh untuk tab baru
+                    link.href = photo.downloadUrl; // URL resolusi penuh untuk tab baru
                     link.target = '_blank'; // Buka di tab baru
                     link.rel = 'noopener noreferrer';
 
@@ -609,7 +784,7 @@ window.addEventListener('load', () => {
                     const item = document.createElement('div');
                     item.className = 'photo-item neobrutalism-box-light';
                     item.style.boxShadow = `4px 4px 0px ${getShadowColor(index)}`;
-                    item.style.backgroundImage = `url(${photo.url})`;
+                    item.style.backgroundImage = `url(${photo.imageUrl})`;
 
                     link.appendChild(item); // Masukkan div ke dalam link
                     photoGrid.appendChild(link); // Masukkan link ke dalam grid
@@ -632,13 +807,13 @@ window.addEventListener('load', () => {
                     activityData.carouselPhotos.forEach(photo => {
                         // Buat elemen <a> sebagai pembungkus slide
                         const link = document.createElement('a');
-                        link.href = photo.url;
+                        link.href = photo.downloadUrl;
                         link.target = '_blank';
                         link.rel = 'noopener noreferrer';
 
                         // Atur link sebagai slide itu sendiri
                         link.className = 'carousel-slide';
-                        link.style.backgroundImage = `url(${photo.url})`;
+                        link.style.backgroundImage = `url(${photo.imageUrl})`;
 
                         // Tidak perlu elemen div terpisah, link itu sendiri adalah slidenya
                         carouselSlides.appendChild(link);
@@ -674,5 +849,72 @@ window.addEventListener('load', () => {
                 console.error("Terjadi kesalahan:", error);
                 // Tangani kesalahan jika pengambilan data gagal
             });
+    }
+
+    // Inisialisasi untuk halaman daftar unduhan (unduh-daftar.html)
+    if (document.getElementById('fileGrid')) {
+        const params = new URLSearchParams(window.location.search);
+        const certificateId = params.get('sertifikat');
+        const downloadData = certificateDownloadData[certificateId];
+
+        if (!downloadData || !downloadData.googleDriveFolderId) {
+            document.getElementById('downloadHeaderTitle').textContent = 'Error';
+            document.getElementById('downloadHeaderSubtitle').textContent = 'Folder tidak ditemukan.';
+            document.getElementById('fileGrid').innerHTML = '<div class="download-placeholder">Folder unduhan untuk sertifikat ini belum diatur.</div>';
+            return;
+        }
+
+        // Perbarui judul halaman
+        document.getElementById('downloadHeaderTitle').textContent = downloadData.title;
+        document.getElementById('downloadHeaderSubtitle').textContent = downloadData.subtitle;
+
+        // Ambil semua file (bukan hanya gambar)
+        fetchFilesFromGoogleDrive(downloadData.googleDriveFolderId, "trashed=false")
+            .then(files => {
+                allFiles = files; // Simpan daftar file asli
+                renderFileList(files); // Tampilkan semua file saat pertama kali dimuat
+            });
+
+        // Tambahkan event listener untuk search bar
+        document.getElementById('fileSearchInput').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredFiles = allFiles.filter(file => 
+                file.name.toLowerCase().includes(searchTerm)
+            );
+            renderFileList(filteredFiles);
+        });
+    }
+
+    function renderFileList(files) {
+        const fileGrid = document.getElementById('fileGrid');
+        fileGrid.innerHTML = ''; // Kosongkan grid
+
+        if (files.length === 0) {
+            fileGrid.innerHTML = '<div class="download-placeholder">Tidak ada file yang ditemukan.</div>';
+            return;
+        }
+
+        const colors = ['#e67e22', '#27ae60', '#2980b9', '#c0392b', '#8e44ad', '#2c3e50', '#ff6b6b', '#4ecdc4', '#f9ca24', '#a55eea'];
+
+        files.forEach((file, index) => {
+            const link = document.createElement('a');
+            link.href = file.downloadUrl;
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            link.className = 'download-item';
+            
+            const color = colors[index % colors.length];
+            link.style.boxShadow = `4px 4px 0px ${color}`;
+            
+            // Atur shadow saat hover
+            link.addEventListener('mouseover', () => { link.style.boxShadow = `2px 2px 0px ${color}`; });
+            link.addEventListener('mouseout', () => { link.style.boxShadow = `4px 4px 0px ${color}`; });
+
+            const title = document.createElement('div');
+            title.className = 'download-item-title';
+            title.textContent = file.name.replace(/\.pdf$/i, ''); // Hapus ekstensi .pdf dari tampilan
+            link.appendChild(title);
+            fileGrid.appendChild(link);
+        });
     }
 });
