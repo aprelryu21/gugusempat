@@ -433,14 +433,14 @@ body {
 
 .form-header h1 {
     color: white;
-    font-size: 10px;
+    font-size: 12px;
     margin: 0 0 8px 0;
     line-height: 1.4;
 }
 
 .form-header h2 {
     color: white;
-    font-size: 7px;
+    font-size: 9px;
     margin: 0;
     opacity: 0.8;
 }
@@ -462,12 +462,12 @@ body {
 }
 
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 25px;
 }
 
 .form-label {
     display: block;
-    font-size: 8px;
+    font-size: 10px;
     margin-bottom: 8px;
     color: #333;
 }
@@ -478,7 +478,7 @@ body {
     border: 3px solid #000;
     box-shadow: 3px 3px 0px #f9ca24;
     font-family: 'Press Start 2P', monospace;
-    font-size: 8px;
+    font-size: 10px;
     background: white;
     box-sizing: border-box;
 }
@@ -525,7 +525,7 @@ textarea.form-input {
 
 .button-row .neobrutalism-button {
     flex: 1;
-    font-size: 8px;
+    font-size: 10px;
     padding: 10px;
 }
 

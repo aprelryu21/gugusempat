@@ -203,6 +203,35 @@ function checkPassword(event) {
     }
 }
 
+function closeCountdownModal(event) {
+    const overlay = document.getElementById('countdownModalOverlay');
+    // Cek jika event ada dan target adalah overlay itu sendiri
+    if (!event || event.target === overlay) {
+        overlay.style.display = 'none';
+    }
+}
+
+function checkDownloadAvailability(event) {
+    event.preventDefault(); // Mencegah navigasi default
+
+    const targetDate = new Date('2025-11-14T00:00:00');
+    const currentDate = new Date();
+
+    if (currentDate < targetDate) {
+        // Jika belum tanggalnya, hitung sisa hari
+        const timeDifference = targetDate.getTime() - currentDate.getTime();
+        const daysRemaining = Math.ceil(timeDifference / (1000 * 3600 * 24));
+
+        const modalTitle = document.getElementById('countdownModalTitle');
+        modalTitle.innerHTML = `Menu Unduh Sertifikat Akan Terbuka Dalam ${daysRemaining} Hari Lagi.<br><br>Buka Kembali Pada Tanggal 14 November 2025.`;
+
+        document.getElementById('countdownModalOverlay').style.display = 'flex';
+    } else {
+        // Jika sudah tanggalnya atau lewat, langsung arahkan
+        window.location.href = 'unduh.html';
+    }
+}
+
 function showPage(pageId) {
     // Fungsi ini tidak lagi digunakan untuk navigasi utama,
     // tapi bisa dipertahankan jika ada penggunaan lain di masa depan.
@@ -449,9 +478,6 @@ async function submitAttendance(event) {
         nip: document.getElementById('attendanceNip').value,
         pangkat: document.getElementById('attendancePangkat').value,
         sekolah: document.getElementById('attendanceSchool').value,
-        gender: document.querySelector('input[name="gender"]:checked').value,
-        agama: document.getElementById('attendanceAgama').value,
-        alamat: document.getElementById('attendanceAlamat').value,
     };
 
     try {

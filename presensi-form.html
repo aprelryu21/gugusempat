@@ -34,22 +34,16 @@
        </div>
        <div class="form-group">
         <label class="form-label" for="attendanceSchool">Asal Sekolah</label>
-        <input type="text" id="attendanceSchool" class="form-input" placeholder="Contoh: SD Negeri Medowo 1" required>
-       </div>
-       <div class="form-group">
-        <label class="form-label">Jenis Kelamin</label>
-        <div class="radio-group">
-         <label class="radio-label"><input type="radio" name="gender" value="Pria" required> Pria</label>
-         <label class="radio-label"><input type="radio" name="gender" value="Wanita"> Wanita</label>
-        </div>
-       </div>
-       <div class="form-group">
-        <label class="form-label" for="attendanceAgama">Agama</label>
-        <input type="text" id="attendanceAgama" class="form-input" placeholder="Contoh: Islam" required>
-       </div>
-       <div class="form-group">
-        <label class="form-label" for="attendanceAlamat">Alamat</label>
-        <textarea id="attendanceAlamat" class="form-input" rows="3" placeholder="Contoh: Dsn. Medowo RT 01 RW 01, Ds. Medowo, Kec. Kandangan" required></textarea>
+        <select id="attendanceSchool" class="form-input" required>
+         <option value="" disabled selected>-- Pilih Sekolah --</option>
+         <option value="SD Negeri Medowo 1">SD Negeri Medowo 1</option>
+         <option value="SD Negeri Medowo 2">SD Negeri Medowo 2</option>
+         <option value="SD Negeri Medowo 3">SD Negeri Medowo 3</option>
+         <option value="SD Negeri Mlancu 1">SD Negeri Mlancu 1</option>
+         <option value="SD Negeri Mlancu 2">SD Negeri Mlancu 2</option>
+         <option value="SD Negeri Mlancu 3">SD Negeri Mlancu 3</option>
+         <option value="SD Negeri Mlancu 4">SD Negeri Mlancu 4</option>
+        </select>
        </div>
        <button type="submit" id="submitAttendanceBtn" class="neobrutalism-button btn-create" style="width: 100%; margin-bottom: 15px;">
         <span class="button-text">Kirim Presensi</span>

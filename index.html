@@ -29,8 +29,7 @@
      <div class="splash-buttons">
       <a href="#" onclick="promptForCertificateGenerator(event)" class="splash-button">Certificate Generator</a>
       <a href="presensi.html" class="splash-button">Presensi Peserta</a>
-      <a href="dokumentasi.html" class="splash-button">Dokumentasi</a>
-      <a href="unduh.html" class="splash-button">Unduh Sertifikat</a>
+      <a href="dokumentasi.html" class="splash-button">Dokumentasi</a><a href="#" onclick="checkDownloadAvailability(event)" class="splash-button">Unduh Sertifikat</a>
      </div>
     </div>
     <div class="bottom-content">
@@ -62,6 +61,16 @@
        <button type="submit" class="neobrutalism-button btn-create">Lanjutkan</button>
       </div>
      </form>
+    </div>
+   </div>
+   <!-- Modal Hitung Mundur -->
+   <div id="countdownModalOverlay" class="modal-overlay" onclick="closeCountdownModal(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+     <button class="modal-close" onclick="closeCountdownModal()">×</button>
+     <div id="countdownModalTitle" class="modal-title" style="text-align: center; line-height: 1.6;"></div>
+     <div class="confirm-buttons">
+      <button type="button" class="neobrutalism-button" onclick="closeCountdownModal()">Tutup</button>
+     </div>
     </div>
    </div>
   </main>
