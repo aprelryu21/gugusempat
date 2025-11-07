@@ -105,7 +105,7 @@ const certificateDownloadData = {
 const attendanceData = {
     'diseminasi_pm': {
         title: 'Diseminasi Pembelajaran Mendalam',
-        date: '04 November 2025'
+        date: '28 Oktober 2025'
     },
     'kegiatan2': {
         title: 'Diseminasi Digitalisasi Pembelajaran',
