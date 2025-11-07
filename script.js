@@ -170,6 +170,39 @@ function startGlitchAnimation() {
 }
 
 // --- PAGE NAVIGATION ---
+function promptForCertificateGenerator(event) {
+    event.preventDefault(); // Mencegah navigasi default
+    document.getElementById('passwordModalOverlay').style.display = 'flex';
+    document.getElementById('passwordInput').focus(); // Langsung fokus ke input
+}
+
+function closePasswordModal(event) {
+    const overlay = document.getElementById('passwordModalOverlay');
+    // Cek jika event ada dan target adalah overlay itu sendiri
+    if (!event || event.target === overlay) {
+        overlay.style.display = 'none';
+        document.getElementById('passwordInput').value = ''; // Kosongkan input saat ditutup
+    }
+}
+
+function checkPassword(event) {
+    event.preventDefault(); // Mencegah form dari submit standar
+    const passwordInput = document.getElementById('passwordInput');
+    const password = passwordInput.value;
+    const correctPassword = "gugus4"; // Ganti "gugus4" dengan password yang Anda inginkan
+
+    if (password.toLowerCase() === correctPassword) {
+        // Jika benar, tutup modal dan arahkan ke halaman sertifikat
+        closePasswordModal();
+        window.location.href = 'sertifikat.html';
+    } else {
+        // Jika salah, beri tahu pengguna
+        alert("Password yang Anda masukkan salah. Coba lagi.");
+        passwordInput.value = ''; // Kosongkan input
+        passwordInput.focus(); // Fokus kembali ke input
+    }
+}
+
 function showPage(pageId) {
     // Fungsi ini tidak lagi digunakan untuk navigasi utama,
     // tapi bisa dipertahankan jika ada penggunaan lain di masa depan.

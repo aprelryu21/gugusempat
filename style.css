@@ -1065,3 +1065,8 @@ textarea.form-input {
     border: 3px dashed #ccc;
     background: #f9f9f9;
 }
+
+/* Style khusus untuk input password di modal */
+#passwordModalOverlay .form-input {
+    box-shadow: 4px 4px 0px #c0392b; /* Bayangan merah untuk menandakan input penting */
+}

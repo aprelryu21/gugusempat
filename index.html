@@ -27,7 +27,7 @@
       GUGUS 4 WIDYA KARYA
      </div>
      <div class="splash-buttons">
-      <a href="sertifikat.html" class="splash-button">Certificate Generator</a>
+      <a href="#" onclick="promptForCertificateGenerator(event)" class="splash-button">Certificate Generator</a>
       <a href="presensi.html" class="splash-button">Presensi Peserta</a>
       <a href="dokumentasi.html" class="splash-button">Dokumentasi</a>
       <a href="unduh.html" class="splash-button">Unduh Sertifikat</a>
@@ -48,9 +48,23 @@
      </div>
     </div>
    </div>
+   <!-- Modal Password -->
+   <div id="passwordModalOverlay" class="modal-overlay" onclick="closePasswordModal(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+     <button class="modal-close" onclick="closePasswordModal()">×</button>
+     <div class="modal-title">Masukkan Password</div>
+     <form id="passwordForm" onsubmit="checkPassword(event)">
+      <div class="form-group">
+       <input type="password" id="passwordInput" class="form-input" placeholder="Password..." required>
+      </div>
+      <div class="confirm-buttons">
+       <button type="button" class="neobrutalism-button" onclick="closePasswordModal()">Batal</button>
+       <button type="submit" class="neobrutalism-button btn-create">Lanjutkan</button>
+      </div>
+     </form>
+    </div>
    </div>
   </main>
   <script src="script.js"></script>
-  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9979ef56155bf888',t:'MTc2MTk4NDgyOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
  </body>
 </html>
