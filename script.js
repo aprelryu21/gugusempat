@@ -214,7 +214,7 @@ function closeCountdownModal(event) {
 function checkDownloadAvailability(event) {
     event.preventDefault(); // Mencegah navigasi default
 
-    const targetDate = new Date('2025-11-11T00:00:00');
+    const targetDate = new Date('2025-11-12T00:00:00');
     const currentDate = new Date();
 
     if (currentDate < targetDate) {
@@ -977,3 +977,4 @@ window.addEventListener('load', () => {
         });
     }
 });
+
