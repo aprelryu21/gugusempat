@@ -189,7 +189,7 @@ function checkPassword(event) {
     event.preventDefault(); // Mencegah form dari submit standar
     const passwordInput = document.getElementById('passwordInput');
     const password = passwordInput.value;
-    const correctPassword = "gugus4"; // Ganti "gugus4" dengan password yang Anda inginkan
+    const correctPassword = "gugus4"; // password menu certificate generator
 
     if (password.toLowerCase() === correctPassword) {
         // Jika benar, tutup modal dan arahkan ke halaman sertifikat
@@ -214,7 +214,7 @@ function closeCountdownModal(event) {
 function checkDownloadAvailability(event) {
     event.preventDefault(); // Mencegah navigasi default
 
-    const targetDate = new Date('2025-11-14T00:00:00');
+    const targetDate = new Date('2025-11-11T00:00:00');
     const currentDate = new Date();
 
     if (currentDate < targetDate) {
@@ -223,7 +223,7 @@ function checkDownloadAvailability(event) {
         const daysRemaining = Math.ceil(timeDifference / (1000 * 3600 * 24));
 
         const modalTitle = document.getElementById('countdownModalTitle');
-        modalTitle.innerHTML = `Menu Unduh Sertifikat Akan Terbuka Dalam ${daysRemaining} Hari Lagi.<br><br>Buka Kembali Pada Tanggal 14 November 2025.`;
+        modalTitle.innerHTML = `Menu Unduh Sertifikat Akan Terbuka Dalam ${daysRemaining} Hari Lagi.<br><br>Silahkan Lakukan Presensi Terlebih Dahulu<br>`;
 
         document.getElementById('countdownModalOverlay').style.display = 'flex';
     } else {
