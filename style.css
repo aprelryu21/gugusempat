@@ -1039,21 +1039,32 @@ textarea.form-input {
 .download-item {
     display: block;
     text-decoration: none;
-    padding: 15px;
     border: 3px solid #000;
     background: #fff;
     transition: all 0.1s ease;
+    display: flex; /* Menggunakan flexbox */
+    flex-direction: column; /* Susun item secara vertikal */
+    overflow: hidden; /* Sembunyikan bagian gambar yang berlebih */
 }
 
-.download-item:hover {
-    transform: translate(2px, 2px);
+.download-item-thumbnail {
+    width: 100%;
+    height: 120px; /* Atur tinggi thumbnail */
+    object-fit: cover; /* Pastikan gambar menutupi area tanpa distorsi */
+    object-position: top; /* Fokus pada bagian atas thumbnail (biasanya berisi judul) */
+    background-color: #e0e0e0; /* Warna latar jika gambar transparan atau gagal dimuat */
+    border-bottom: 3px solid #000; /* Garis pemisah antara gambar dan judul */
 }
 
 .download-item-title {
+    padding: 12px; /* Beri padding pada teks judul */
     font-size: 8px;
     color: #333;
     line-height: 1.4;
-    word-break: break-all; /* Memastikan nama file panjang tidak merusak layout */
+    word-break: break-all;
+}
+.download-item:hover {
+    transform: translate(2px, 2px);
 }
 
 .download-placeholder {

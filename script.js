@@ -30,11 +30,11 @@ const certificateDescriptions = {
 const certificateTemplates = {
     'Pembelajaran Mendalam': {
         id: 'pm',
-        url: 'https://raw.githubusercontent.com/aprelryu21/gugusempat/main/sertifikat%20pm.pdf'
+        url: 'https://raw.githubusercontent.com/aprelryu21/gugusempat/main/sertifikat-pm-auto.pdf'
     },
     'Digitalisasi Pembelajaran': {
         id: 'digitalisasi',
-        url: 'https://raw.githubusercontent.com/aprelryu21/gugusempat/main/sertifikat%20digitalisasi.pdf'
+        url: 'https://raw.githubusercontent.com/aprelryu21/gugusempat/main/sertifikat-dp-auto.pdf'
     },
     'Sertifikat 3': {
         id: 'sertifikat3',
@@ -397,24 +397,30 @@ function closeSuccessModalAndRedirect() {
 // --- CERTIFICATE FORM ---
 
 async function generateUniqueCertificateNumber() {
-    // PASTIKAN ANDA MENGGANTI URL INI DENGAN URL WEB APP BARU ANDA
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzk7fI1ju3NzL-c73umJt4f9u7_71vNXP27YngoiweZd_UJuMcJy-ahkPbl4RV1hAUc/exec"; // Ganti dengan URL baru Anda
-
-    // Dapatkan ID sertifikat dari state
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw6TNfOVnpQrWSSLRXYQegYkBXq5FZ_WbBtCM7MsEYB_dTUi1TwuegfE5keo1n9cNSp/exec";
     const certConfig = certificateTemplates[appState.currentCertificate];
     if (!certConfig) return "Error: Tipe sertifikat tidak dikenal";
 
     try {
-        // Tambahkan parameter 'type' ke URL
-        const response = await fetch(`${SCRIPT_URL}?type=${certConfig.id}`);
+        const response = await fetch(`${SCRIPT_URL}?requestType=certificate&type=${certConfig.id}`);
         if (!response.ok) {
             throw new Error('Respons jaringan tidak baik.');
         }
-        const data = await response.json();
-        if (data.status === 'success') {
+
+        // Baca respons sebagai teks terlebih dahulu untuk menghindari error JSON
+        const textResponse = await response.text();
+        
+        // Parse respons sebagai JSON
+        const data = JSON.parse(textResponse);
+
+        // Cek apakah respons sukses dan berisi nomor
+        if (data.status === 'success' && data.number) {
+            // Langsung kembalikan nomor sertifikat yang sudah jadi dari server.
+            // Tidak perlu lagi parsing atau formatting di sini.
             return data.number;
         } else {
-            throw new Error(data.message || 'Gagal mendapatkan nomor dari server.');
+            // Jika format respons tidak sesuai, lempar error.
+            throw new Error(data.message || 'Format respons dari server tidak valid.');
         }
     } catch (error) {
         console.error("Error fetching unique number:", error);
@@ -473,7 +479,7 @@ function createCertificate(event) {
 
 async function saveParticipantData(data) {
     // URL ini HARUS SAMA dengan yang digunakan untuk generate nomor
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzk7fI1ju3NzL-c73umJt4f9u7_71vNXP27YngoiweZd_UJuMcJy-ahkPbl4RV1hAUc/exec"; // URL yang sudah diperbaiki
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw6TNfOVnpQrWSSLRXYQegYkBXq5FZ_WbBtCM7MsEYB_dTUi1TwuegfE5keo1n9cNSp/exec"; // URL yang sudah diperbaiki
 
     // Tambahkan tipe sertifikat ke data yang akan dikirim
     const certConfig = certificateTemplates[appState.currentCertificate];
@@ -501,7 +507,7 @@ async function saveParticipantData(data) {
 // --- ATTENDANCE FORM ---
 async function submitAttendance(event) {
     event.preventDefault();
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzk7fI1ju3NzL-c73umJt4f9u7_71vNXP27YngoiweZd_UJuMcJy-ahkPbl4RV1hAUc/exec"; // URL yang sama
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw6TNfOVnpQrWSSLRXYQegYkBXq5FZ_WbBtCM7MsEYB_dTUi1TwuegfE5keo1n9cNSp/exec"; // URL yang sama
     const submitBtn = document.getElementById('submitAttendanceBtn');
     const loadingModal = document.getElementById('loadingModalOverlay');
 
