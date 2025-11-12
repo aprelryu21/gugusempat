@@ -174,8 +174,19 @@ function startGlitchAnimation() {
 // --- PAGE NAVIGATION ---
 function promptForCertificateGenerator(event) {
     event.preventDefault(); // Mencegah navigasi default
-    document.getElementById('passwordModalOverlay').style.display = 'flex';
-    document.getElementById('passwordInput').focus(); // Langsung fokus ke input
+
+    const lockDate = new Date('2025-11-13T00:00:00');
+    const currentDate = new Date();
+
+    // Cek apakah tanggal saat ini sudah melewati tanggal kunci
+    if (currentDate >= lockDate) {
+        // Jika sudah lewat, langsung buka halaman sertifikat
+        window.location.href = 'sertifikat.html';
+    } else {
+        // Jika belum, tampilkan modal password
+        document.getElementById('passwordModalOverlay').style.display = 'flex';
+        document.getElementById('passwordInput').focus(); // Langsung fokus ke input
+    }
 }
 
 function closePasswordModal(event) {
