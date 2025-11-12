@@ -6,6 +6,8 @@ const appState = {
     currentDocDate: '',
     currentDocLink: '',
     currentMateriLink: '',
+    isForcingDownload: false, // Flag untuk membuka paksa menu unduh
+    targetAttendanceActivityId: null, // Untuk menyimpan ID presensi saat password diminta
 };
 
 // Default configuration for the application
@@ -181,6 +183,7 @@ function closePasswordModal(event) {
     // Cek jika event ada dan target adalah overlay itu sendiri
     if (!event || event.target === overlay) {
         overlay.style.display = 'none';
+        appState.isForcingDownload = false; // Reset flag jika modal ditutup
         document.getElementById('passwordInput').value = ''; // Kosongkan input saat ditutup
     }
 }
@@ -191,15 +194,30 @@ function checkPassword(event) {
     const password = passwordInput.value;
     const correctPassword = "gugus4"; // password menu certificate generator
 
-    if (password.toLowerCase() === correctPassword) {
-        // Jika benar, tutup modal dan arahkan ke halaman sertifikat
-        closePasswordModal();
-        window.location.href = 'sertifikat.html';
-    } else {
+    if (password.toLowerCase() !== correctPassword) {
         // Jika salah, beri tahu pengguna
         alert("Password yang Anda masukkan salah. Coba lagi.");
         passwordInput.value = ''; // Kosongkan input
         passwordInput.focus(); // Fokus kembali ke input
+        return;
+    }
+
+    // Jika password benar, lanjutkan ke tujuan
+    if (appState.isForcingDownload) {
+        // Jika tujuannya adalah membuka paksa menu unduh
+        appState.isForcingDownload = false; // Reset flag
+        closePasswordModal();
+        window.location.href = 'unduh.html';
+    } else if (appState.targetAttendanceActivityId) {
+        // Jika targetnya adalah form presensi
+        const activityId = appState.targetAttendanceActivityId;
+        appState.targetAttendanceActivityId = null; // Reset state
+        closePasswordModal();
+        navigateToAttendanceForm(activityId);
+    } else {
+        // Fallback: asumsikan tujuannya adalah Certificate Generator
+        closePasswordModal();
+        window.location.href = 'sertifikat.html';
     }
 }
 
@@ -230,6 +248,14 @@ function checkDownloadAvailability(event) {
         // Jika sudah tanggalnya atau lewat, langsung arahkan
         window.location.href = 'unduh.html';
     }
+}
+
+function forceOpenDownload() {
+    // Tutup modal hitung mundur dulu
+    closeCountdownModal();
+    // Set flag dan buka modal password
+    appState.isForcingDownload = true;
+    promptForCertificateGenerator({ preventDefault: () => {} }); // Memakai ulang fungsi yang sudah ada
 }
 
 function showPage(pageId) {
@@ -275,6 +301,22 @@ function navigateToAttendanceForm(activityId) {
     const params = new URLSearchParams();
     params.append('kegiatan', activityId);
     window.location.href = `presensi-form.html?${params.toString()}`;
+}
+
+function handleAttendanceClick(activityId) {
+    const lockDate = new Date('2025-11-13T00:00:00');
+    const currentDate = new Date();
+    const lockedActivities = ['diseminasi_pm', 'kegiatan2'];
+
+    // Cek apakah tanggal sudah lewat DAN kegiatan termasuk yang dikunci
+    if (currentDate >= lockDate && lockedActivities.includes(activityId)) {
+        appState.targetAttendanceActivityId = activityId; // Simpan tujuan
+        document.getElementById('passwordModalOverlay').style.display = 'flex';
+        document.getElementById('passwordInput').focus();
+    } else {
+        // Jika belum tanggalnya atau kegiatan tidak dikunci, langsung navigasi
+        navigateToAttendanceForm(activityId);
+    }
 }
 
 function showDocModal(activityName, date, link, materiLink) {
@@ -752,7 +794,7 @@ window.addEventListener('load', () => {
         }
 
         // Kita hanya butuh ID dan nama file. URL akan kita buat sendiri.
-        const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+${mimeTypeQuery}&key=${GOOGLE_API_KEY}&fields=files(id,name,webViewLink)`;
+        const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+${mimeTypeQuery}&key=${GOOGLE_API_KEY}&fields=files(id,name,webViewLink,thumbnailLink)`;
 
         try {
             const response = await fetch(url);
@@ -772,7 +814,8 @@ window.addEventListener('load', () => {
                 name: file.name,
                 // Gunakan URL gambar jika ada, atau link web view untuk file lain
                 imageUrl: mimeTypeQuery.includes('image') ? `https://lh3.googleusercontent.com/d/${file.id}` : null,
-                downloadUrl: file.webViewLink // Link untuk membuka file di Google Drive
+                downloadUrl: file.webViewLink, // Link untuk membuka file di Google Drive
+                thumbnailLink: file.thumbnailLink // Tambahkan link thumbnail
             }));
         } catch (error) {
             console.error("Error saat mengambil data dari Google Drive:", error);
@@ -949,13 +992,19 @@ window.addEventListener('load', () => {
         fileGrid.innerHTML = ''; // Kosongkan grid
 
         if (files.length === 0) {
+            // Cek apakah ini hasil dari pencarian atau pemuatan awal
+            const searchTerm = document.getElementById('fileSearchInput').value;
+            const message = searchTerm ? 'Tidak ada file yang cocok dengan pencarian Anda.' : 'Tidak ada file yang ditemukan di folder ini.';
             fileGrid.innerHTML = '<div class="download-placeholder">Tidak ada file yang ditemukan.</div>';
             return;
         }
 
         const colors = ['#e67e22', '#27ae60', '#2980b9', '#c0392b', '#8e44ad', '#2c3e50', '#ff6b6b', '#4ecdc4', '#f9ca24', '#a55eea'];
 
-        files.forEach((file, index) => {
+        // Urutkan file berdasarkan nama (abjad) sebelum ditampilkan
+        const sortedFiles = files.sort((a, b) => a.name.localeCompare(b.name));
+
+        sortedFiles.forEach((file, index) => {
             const link = document.createElement('a');
             link.href = file.downloadUrl;
             link.target = '_blank';
@@ -969,13 +1018,23 @@ window.addEventListener('load', () => {
             link.addEventListener('mouseover', () => { link.style.boxShadow = `2px 2px 0px ${color}`; });
             link.addEventListener('mouseout', () => { link.style.boxShadow = `4px 4px 0px ${color}`; });
 
+            // Buat elemen untuk thumbnail
+            const thumbnail = document.createElement('img');
+            thumbnail.className = 'download-item-thumbnail';
+            // Gunakan thumbnailLink, jika tidak ada, gunakan gambar placeholder
+            thumbnail.src = file.thumbnailLink || 'https://raw.githubusercontent.com/aprelryu21/gugusempat/main/favicon.png'; // Ganti dengan URL placeholder jika perlu
+            thumbnail.alt = `Thumbnail untuk ${file.name}`;
+            thumbnail.onerror = function() { // Fallback jika thumbnail gagal dimuat
+                this.src = 'https://raw.githubusercontent.com/aprelryu21/gugusempat/main/favicon.png';
+            };
+            link.appendChild(thumbnail);
+
             const title = document.createElement('div');
             title.className = 'download-item-title';
             title.textContent = file.name.replace(/\.pdf$/i, ''); // Hapus ekstensi .pdf dari tampilan
             link.appendChild(title);
+
             fileGrid.appendChild(link);
         });
     }
 });
-
-
